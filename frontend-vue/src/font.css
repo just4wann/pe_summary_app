@@ -1,0 +1,27 @@
+
+
+.p-row-odd {
+  background-color: #bdbdbd;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  /*background: #f1f1f1;*/
+  background: #2e2e2e;
+  border-radius: 50px;
+}
+
+::-webkit-scrollbar-thumb {
+  /*background: #cfcfcf;*/
+  background: #474747;
+  border-radius: 50px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  /*background: #bdbdbd;*/
+  background: #505050;
+
+}
