@@ -38,14 +38,14 @@ export class UserService {
 
     const isUserRegistered = await User.findOne({
       where: {
-        [Op.or] : [
+        [Op.or]: [
           {
-            username: request.user
+            username: request.user,
           },
           {
-            nik: request.user
-          }
-        ]
+            nik: request.user,
+          },
+        ],
       },
     });
 
@@ -65,12 +65,12 @@ export class UserService {
         where: {
           [Op.or]: [
             {
-              username: request.user
+              username: request.user,
             },
             {
-              nik: request.user
-            }
-          ]
+              nik: request.user,
+            },
+          ],
         },
       }
     );
@@ -86,44 +86,85 @@ export class UserService {
     };
   }
 
+  static async logout(user: User): Promise<ResponseBody<string>> {
+    const deleteUserToken = await User.update(
+      {
+        token: '',
+      },
+      {
+        where: {
+          username: user.username,
+        },
+      }
+    );
+
+    if (deleteUserToken[0] < 0) throw new ResponseError(400, 'Error during logout process');
+
+    return {
+      statusCode: 200,
+      message: 'OK',
+      data: 'Logout Success',
+    };
+  }
+
+  static async updatePassword(user: User, newPassword: string): Promise<ResponseBody<string>> {
+    const isPasswordSame = await bcrypt.compare(newPassword, user.password);
+
+    if (isPasswordSame) throw new ResponseError(400, 'Thats your old password dude, try something else.');
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    const updatePassword = await User.update(
+      {
+        password: hashedPassword,
+      },
+      {
+        where: {
+          username: user.username,
+        },
+      }
+    );
+
+    if (updatePassword[0] < 0) throw new ResponseError(400, 'Error during change password');
+
+    return {
+      statusCode: 200,
+      message: 'OK',
+      data: 'Success change password',
+    };
+  }
+
   static async getAll(): Promise<ResponseBody<User[]>> {
     const users = await User.findAll({
-      attributes: ['id', 'username', 'fullname', 'nik']
+      attributes: ['id', 'username', 'fullname', 'nik'],
     });
     return {
       statusCode: 200,
       message: 'Success get Users',
-      data: users
-    }
+      data: users,
+    };
   }
 
   static async get(userToken: string): Promise<ResponseBody<User>> {
     const user = await User.findOne({
       attributes: ['id', 'username', 'fullname', 'nik'],
       where: {
-        token: userToken
+        token: userToken,
       },
-    })
+    });
     if (!user) throw new ResponseError(404, 'User not found');
 
     return {
       statusCode: 200,
       message: 'Success get user',
-      data: user
-    }
+      data: user,
+    };
   }
 }
 
 export class PostService {
-  static async create(value: PostDataRequest, userToken: string): Promise<ResponseBody<Post>> {
-    if (value.title == '' || value.description == '' || value.factory == '' || value.status == '') throw new ResponseError(400, 'Input field cannot empty')
-    const user = await User.findOne({
-      where: {
-        token: userToken,
-      },
-    });
-
-    if (!user) throw new ResponseError(404, 'User not found')
+  static async create(value: PostDataRequest, user: User): Promise<ResponseBody<Post>> {
+    if (value.title == '' || value.description == '' || value.factory == '' || value.status == '') throw new ResponseError(400, 'Input field cannot empty');
 
     const post = await Post.create({
       title: value.title,
@@ -140,15 +181,7 @@ export class PostService {
     };
   }
 
-  static async getByUsername(userToken: string): Promise<ResponseBody<User[]>> {
-    const user = await User.findOne({
-      where: {
-        token: userToken,
-      },
-    });
-
-    if (!user) throw new ResponseError(404, 'User not found')
-
+  static async getByUsername(user: User): Promise<ResponseBody<User[]>> {
     const post = await User.findAll({
       attributes: ['username', 'fullname'],
       where: {
@@ -172,16 +205,83 @@ export class PostService {
     const post = await Post.findAll({
       include: [
         {
-          attributes: ["fullname", "nik"],
-          model: User
-        }
-      ]
+          attributes: ['fullname', 'nik'],
+          model: User,
+        },
+      ],
     });
     if (post.length === 0) throw new ResponseError(404, 'Post not found');
     return {
       statusCode: 200,
       message: 'All Post',
-      data: post
-    }
+      data: post,
+    };
+  }
+}
+
+export class PasswordService {
+  static async findUser(userInfo: string): Promise<ResponseBody<string>> {
+    const user = await User.findOne({
+      where: {
+        [Op.or]: [
+          {
+            username: userInfo,
+          },
+          {
+            nik: userInfo,
+          },
+        ],
+      },
+    });
+
+    if (!user) throw new ResponseError(404, `User with username or nik : ${userInfo} not found`);
+
+    return {
+      statusCode: 200,
+      message: 'OK',
+      data: userInfo,
+    };
+  }
+
+  static async updatePassword(userInfo: string, newPassword: string): Promise<ResponseBody<string>> {
+    const user = await User.findOne({
+      where: {
+        [Op.or]: [
+          {
+            username: userInfo,
+          },
+          {
+            nik: userInfo,
+          },
+        ],
+      },
+    });
+
+    if (!user) throw new ResponseError(404, `User not found`);
+
+    const isPasswordSame = await bcrypt.compare(newPassword, user.password);
+
+    if (isPasswordSame) throw new ResponseError(400, 'Thats your old password dude, try something else.');
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    const updatePassword = await User.update(
+      {
+        password: hashedPassword,
+      },
+      {
+        where: {
+          username: user.username,
+        },
+      }
+    );
+
+    if (updatePassword[0] < 0) throw new ResponseError(400, 'Error during change password');
+
+    return {
+      statusCode: 200,
+      message: 'OK',
+      data: 'Success change password',
+    };
   }
 }

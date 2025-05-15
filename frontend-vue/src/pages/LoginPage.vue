@@ -46,7 +46,7 @@ const login = async () => {
               <Password id="password" v-model="password" :feedback="false" placeholder="Password" toggleMask fluid size="small" class="text-xs" type="password" />
             </IconField>
 
-            <p class="poppins-bold underline">Forgot password?</p>
+            <RouterLink to="/forgot" class="poppins-bold underline">Forgot password?</RouterLink>
 
             <button type="submit" class="flex items-center justify-center gap-3 mt-2 py-2.5 rounded-lg bg-slate-700 text-slate-50 hover:cursor-pointer hover:bg-slate-800" @click="login()">
               <i class="pi pi-sign-in" style="font-size: 0.8rem;"></i>

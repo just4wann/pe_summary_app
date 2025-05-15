@@ -31,6 +31,7 @@ import SpeedDial from 'primevue/speeddial';
 import MainPage from './pages/MainPage.vue';
 import LoginPage from './pages/LoginPage.vue';
 import RegisterPage from './pages/RegisterPage.vue';
+import ForgotPasswordPage from './pages/ForgotPasswordPage.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -45,6 +46,10 @@ const routes: RouteRecordRaw[] = [
     path: '/login',
     component: LoginPage,
   },
+  {
+    path: '/forgot',
+    component: ForgotPasswordPage
+  }
 ];
 
 const router = createRouter({

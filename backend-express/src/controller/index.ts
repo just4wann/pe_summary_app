@@ -1,5 +1,5 @@
 import type { Response, Request, NextFunction } from 'express';
-import { PostService, UserService } from '@/service/index.js';
+import { PasswordService, PostService, UserService } from '@/service/index.js';
 import { RegisterUserRequest, LoginUserRequest, PostDataRequest } from '@/types/index.js';
 import jwt from 'jsonwebtoken';
 
@@ -30,6 +30,16 @@ export class UserController {
     }
   }
 
+  static async userLogout(req: Request, res: Response, next: NextFunction) {
+    try {
+      const response = await UserService.logout(req.user!);
+      res.clearCookie('token');
+      res.status(response.statusCode).json(response);
+    } catch (error) {
+      next(error)
+    }
+  }
+
   static async getAllUser(req: Request, res: Response, next: NextFunction) {
     try {
       const response = await UserService.getAll();
@@ -53,7 +63,7 @@ export class PostController {
   static async create(req: Request, res: Response, next: NextFunction) {
       try {
         const dataPost = req.body as PostDataRequest;
-        const response = await PostService.create(dataPost, req.user?.token!)
+        const response = await PostService.create(dataPost, req.user!)
         res.status(response.statusCode).json(response)
     } catch (error) {
         next(error)
@@ -62,7 +72,7 @@ export class PostController {
 
   static async get(req: Request, res: Response, next: NextFunction) {
     try {
-        const response = await PostService.getByUsername(req.user?.token!);
+        const response = await PostService.getByUsername(req.user!);
         res.status(response.statusCode).json(response);
     } catch (error) {
         next(error)
@@ -73,6 +83,28 @@ export class PostController {
     try {
       const response = await PostService.getAll();
       res.status(response.statusCode).json(response);
+    } catch (error) {
+      next(error)
+    }
+  }
+}
+
+export class PasswordController {
+    static async findUser(req: Request, res: Response, next: NextFunction) {
+      try {
+        const userInfo = req.body as { user: string };
+        const response = await PasswordService.findUser(userInfo.user);
+        res.status(response.statusCode).json(response)
+      } catch (error) {
+        next(error)
+      }
+    }
+  
+    static async changePassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const reqNewPassword = req.body as { user: string, password: string };
+      const response = await PasswordService.updatePassword(reqNewPassword.user, reqNewPassword.password);
+      res.status(response.statusCode).json(response)
     } catch (error) {
       next(error)
     }

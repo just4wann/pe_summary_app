@@ -27,7 +27,6 @@ export type FeedBodyType = {
 };
 
 export type ClearValueType = {
-  // visible: boolean;
   title: string;
   description: string;
   factory: FactorySelectedType

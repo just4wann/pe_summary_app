@@ -29,6 +29,7 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
         ]
       },
     });
+    if (!user) throw new ResponseError(404, 'User not found')
     req.user = user
     next();
   } catch (error) {
