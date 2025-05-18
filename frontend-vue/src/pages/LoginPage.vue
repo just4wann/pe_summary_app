@@ -49,8 +49,8 @@ const login = async () => {
             <RouterLink to="/forgot" class="poppins-bold underline">Forgot password?</RouterLink>
 
             <button type="submit" class="flex items-center justify-center gap-3 mt-2 py-2.5 rounded-lg bg-slate-700 text-slate-50 hover:cursor-pointer hover:bg-slate-800" @click="login()">
-              <i class="pi pi-sign-in" style="font-size: 0.8rem;"></i>
-              <p class="text-xs ">Sign In</p>
+              <i class="pi pi-sign-in" style="font-size: 0.8rem"></i>
+              <p class="text-xs">Sign In</p>
             </button>
           </div>
           <p class="text-xs">Don't have an account? <RouterLink to="/register" class="poppins-bold underline">Register here</RouterLink></p>
@@ -62,4 +62,5 @@ const login = async () => {
   </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>

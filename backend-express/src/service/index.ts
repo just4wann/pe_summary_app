@@ -181,23 +181,17 @@ export class PostService {
     };
   }
 
-  static async getByUsername(user: User): Promise<ResponseBody<User[]>> {
-    const post = await User.findAll({
-      attributes: ['username', 'fullname'],
+  static async getByUsername(user: User): Promise<ResponseBody<Post[]>> {
+    const posts = await Post.findAll({
       where: {
-        id: user.id,
+        UserId: user.id
       },
-      include: [
-        {
-          model: Post,
-        },
-      ],
     });
 
     return {
       statusCode: 200,
       message: 'Post Find',
-      data: post,
+      data: posts,
     };
   }
 
@@ -205,7 +199,7 @@ export class PostService {
     const post = await Post.findAll({
       include: [
         {
-          attributes: ['fullname', 'nik'],
+          attributes: ['fullname', 'nik', 'username'],
           model: User,
         },
       ],

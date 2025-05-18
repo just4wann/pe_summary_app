@@ -27,11 +27,16 @@ import ConfirmPopup from 'primevue/confirmpopup';
 import FocusTrap from 'primevue/focustrap';
 import Tooltip from 'primevue/tooltip';
 import SpeedDial from 'primevue/speeddial';
+import FileUpload from 'primevue/fileupload';
+import Paginator from 'primevue/paginator';
 
 import MainPage from './pages/MainPage.vue';
 import LoginPage from './pages/LoginPage.vue';
 import RegisterPage from './pages/RegisterPage.vue';
 import ForgotPasswordPage from './pages/ForgotPasswordPage.vue';
+import ProfilePage from './pages/ProfilePage.vue';
+import SearchPage from './pages/SearchPage.vue';
+import PostPage from './pages/PostPage.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -49,7 +54,19 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/forgot',
     component: ForgotPasswordPage
-  }
+  },
+  {
+    path: '/profile',
+    component: ProfilePage
+  },
+  {
+    path: '/search',
+    component: SearchPage
+  },
+  {
+    path: '/add',
+    component: PostPage
+  },
 ];
 
 const router = createRouter({
@@ -93,6 +110,8 @@ app.component('Password', Password);
 app.component('Checkbox', Checkbox);
 app.component('ConfirmPopup', ConfirmPopup);
 app.component('SpeedDial', SpeedDial);
+app.component('FileUpload', FileUpload);
+app.component('Paginator', Paginator);
 
 app.directive('focustrap', FocusTrap);
 app.directive('tooltip', Tooltip);

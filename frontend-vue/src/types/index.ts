@@ -7,6 +7,14 @@ export type FeedType = {
   User: UserPostType;
 };
 
+export type FeedOfUserType = {
+  title: string;
+  description: string;
+  factory: string;
+  status: string;
+  createdAt: string;
+}
+
 export type UserType = {
   id: number;
   username: string;
@@ -29,33 +37,34 @@ export type FeedBodyType = {
 export type ClearValueType = {
   title: string;
   description: string;
-  factory: FactorySelectedType
+  factory: FactorySelectedType;
   status: string;
 };
 
 export type FactorySelectedType = {
   name: string;
   code: string;
-}
+};
 
 export type UserRegistRequestBody = {
   username: string;
   fullname: string;
   nik: string;
   password: string;
-}
+};
 
 export type UserLoginRequestBody = {
   user: string;
   password: string;
-}
+};
 
 export type ResponseAPI<T> = {
-  data?: T,
-  error?: boolean
-}
+  data?: T;
+  error?: boolean;
+};
 
 export type UserPostType = {
   fullname: string;
-  nik: string
-}
+  username: string;
+  nik: string;
+};

@@ -1,18 +1,21 @@
 <script setup lang="ts">
 defineProps<{
   isLogin: boolean;
-  logo: string | undefined;
 }>();
 </script>
 <template>
-  <section class="flex justify-between items-center mx-5">
-    <h1 class="text-2xl">SummaryPE</h1>
-    <Avatar v-if="isLogin" :label="logo" size="small" shape="circle" />
-    <RouterLink v-else to="/login" class="flex items-center gap-2 text-xs bg-slate-200 text-slate-700 py-2 px-4 rounded-lg hover:cursor-pointer">
-      <i class="pi pi-user" style="font-size: 0.7rem" />
-      <p>Sign In</p>
+  <header class="flex justify-between items-center bg-white p-5">
+    <h1 class="text-lg">SummaryPE</h1>
+    <section class="flex justify-center items-center" v-if="isLogin">
+      <OverlayBadge severity="danger">
+        <i class="pi pi-bell" style="font-size: 1.1rem"></i>
+      </OverlayBadge>
+    </section>
+    <RouterLink v-else to="/login" class="flex items-center gap-2 text-xs bg-slate-200 text-slate-700 py-1.5 px-2.5 rounded-md hover:cursor-pointer">
+      <i class="pi pi-sign-in" style="font-size: 0.7rem" />
+      <p class="text-[0.6rem]">Sign In</p>
     </RouterLink>
-  </section>
+  </header>
 </template>
 
 <style scoped></style>

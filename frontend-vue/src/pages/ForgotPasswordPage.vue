@@ -6,7 +6,7 @@ import { PasswordAPI } from '../composables';
 
 const router = useRouter();
 
-const passwordAPI = new PasswordAPI(useToast())
+const passwordAPI = new PasswordAPI(useToast());
 
 const user = ref<string>('');
 const newPassword = ref<string>('');
@@ -15,23 +15,22 @@ const isAllowed = ref<boolean>(false);
 
 const find = async () => {
   const reqBody: { user: string } = {
-    user: user.value
-  }
-  const result = await passwordAPI.findUser(reqBody)
+    user: user.value,
+  };
+  const result = await passwordAPI.findUser(reqBody);
   if (!result) return;
-  isAllowed.value = true
-}
+  isAllowed.value = true;
+};
 
 const change = async () => {
-  const reqBody: { user: string, password: string } = {
+  const reqBody: { user: string; password: string } = {
     user: user.value,
-    password: reTypePassword.value
-  }
-  const result = await passwordAPI.changePassword(reqBody)
+    password: reTypePassword.value,
+  };
+  const result = await passwordAPI.changePassword(reqBody);
   if (!result) return;
-  router.push('/login')
-}
-
+  router.push('/login');
+};
 </script>
 
 <template>
@@ -65,16 +64,21 @@ const change = async () => {
               <InputIcon>
                 <i class="pi pi-lock" style="font-size: 0.8rem" />
               </InputIcon>
-              <Password id="password" v-model="newPassword" :feedback="false" placeholder="New Password" toggleMask fluid size="small" class="text-xs" type="password" :disabled="!isAllowed"/>
+              <Password id="password" v-model="newPassword" :feedback="false" placeholder="New Password" toggleMask fluid size="small" class="text-xs" type="password" :disabled="!isAllowed" />
             </IconField>
             <IconField>
               <InputIcon>
                 <i class="pi pi-lock" style="font-size: 0.8rem" />
               </InputIcon>
-              <Password id="password" v-model="reTypePassword" :feedback="false" placeholder="Re-type Password" toggleMask fluid size="small" class="text-xs" type="password" :disabled="!isAllowed"/>
+              <Password id="password" v-model="reTypePassword" :feedback="false" placeholder="Re-type Password" toggleMask fluid size="small" class="text-xs" type="password" :disabled="!isAllowed" />
             </IconField>
 
-            <button @click="change()" :disabled="!isAllowed" type="submit" class="flex items-center justify-center gap-3 mt-2 py-2.5 rounded-lg bg-slate-700 text-slate-50 hover:cursor-pointer hover:bg-slate-800 disabled:bg-slate-400 disabled:cursor-not-allowed">
+            <button
+              @click="change()"
+              :disabled="!isAllowed"
+              type="submit"
+              class="flex items-center justify-center gap-3 mt-2 py-2.5 rounded-lg bg-slate-700 text-slate-50 hover:cursor-pointer hover:bg-slate-800 disabled:bg-slate-400 disabled:cursor-not-allowed"
+            >
               <i class="pi pi-pencil" style="font-size: 0.8rem"></i>
               <p class="text-xs">Set Password</p>
             </button>
@@ -87,4 +91,5 @@ const change = async () => {
   </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>

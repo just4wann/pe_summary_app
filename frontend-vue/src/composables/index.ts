@@ -1,7 +1,7 @@
 import type { Ref } from 'vue';
 import type { Router } from 'vue-router';
 import type { ToastServiceMethods } from 'primevue';
-import type { UserType, FeedType, FeedBodyType, ClearValueType, UserRegistRequestBody, UserLoginRequestBody } from '../types';
+import type { UserType, FeedType, FeedBodyType, ClearValueType, UserRegistRequestBody, UserLoginRequestBody, FeedOfUserType } from '../types';
 
 export class Function {
   public static useClear<T extends keyof ClearValueType>(value: ClearValueType, fields: T[]) {
@@ -32,7 +32,7 @@ export class FeedAPI {
     }
   }
 
-  public async postFeed(feedBody: FeedBodyType, feedSummary: Ref<FeedType[]>): Promise<boolean> {
+  public async postFeed(feedBody: FeedBodyType): Promise<boolean> {
     try {
       const res = await fetch(import.meta.env.VITE_API_POST_FEED_URL, {
         method: 'POST',
@@ -48,11 +48,30 @@ export class FeedAPI {
         return false;
       }
       this.toast.add({ severity: 'success', summary: 'Post Uploaded', detail: 'Your post has been added to feed', life: 3000 });
-      this.getAllFeed(feedSummary);
       return true;
     } catch (error) {
       this.toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 });
       return false;
+    }
+  }
+
+  public async getFeedUser(feeds: Ref<FeedOfUserType[]>) {
+    try {
+      const res = await fetch(import.meta.env.VITE_API_GET_FEED_USER_URL, {
+        method: 'GET',
+        credentials: 'include',
+      });
+      const result = await res.json();
+      if (result.statusCode != 200) {
+        this.toast.add({ severity: 'error', summary: 'Error', detail: result.message, life: 3000 });
+        return;
+      }
+      for (let i in result.data) {
+        feeds.value.unshift(result.data[i])
+      }
+    } catch (error) {
+      this.toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 });
+      return;
     }
   }
 }
@@ -142,40 +161,40 @@ export class PasswordAPI {
       const res = await fetch(import.meta.env.VITE_API_FIND_USER_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(userInfo)
-      })
+        body: JSON.stringify(userInfo),
+      });
       const result = await res.json();
       if (result.statusCode !== 200) {
         this.toast.add({ severity: 'error', summary: 'Error', detail: result.message, life: 3000 });
-        return false
+        return false;
       }
-      return true
+      return true;
     } catch (error) {
       this.toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 });
-      return false
+      return false;
     }
   }
 
-  public async changePassword(newPassword: { user: string, password: string }): Promise<boolean> {
+  public async changePassword(newPassword: { user: string; password: string }): Promise<boolean> {
     try {
       const res = await fetch(import.meta.env.VITE_API_CHANGE_PASSWORD_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newPassword)
-      })
-      const result = await res.json()
+        body: JSON.stringify(newPassword),
+      });
+      const result = await res.json();
       if (result.statusCode !== 200) {
         this.toast.add({ severity: 'error', summary: 'Error', detail: result.message, life: 3000 });
-        return false
+        return false;
       }
-      return true
+      return true;
     } catch (error) {
       this.toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 });
-      return false
+      return false;
     }
   }
 }

@@ -2,39 +2,42 @@
 import { onMounted, ref } from 'vue';
 import { useToast } from 'primevue';
 
-import { type UserType } from '../types';
-import { UserAPI } from '../composables';
+import { type FeedType, type UserType } from '../types';
+import { FeedAPI, UserAPI } from '../composables';
 
 import Header from '../components/Header.vue';
-import SideSection from '../components/SideSection.vue';
-import FeedSection from '../components/FeedSection.vue';
-import MemberSection from '../components/MemberSection.vue';
+import Footer from '../components/Footer.vue';
+import AddPostAction from '../components/AddPostAction.vue';
+import Feed from '../components/Feed/Feed.vue';
 
 const userAPI = new UserAPI(useToast());
+const feedAPI = new FeedAPI(useToast());
 
 const isLogin = ref<boolean>(false);
 const user = ref<UserType | null | undefined>();
+
+const feeds = ref<FeedType[]>([])
 
 onMounted(async () => {
   user.value = await userAPI.getCurrentUser();
   if (user.value != null) {
     isLogin.value = true;
   }
+  
+  feedAPI.getAllFeed(feeds)
 });
 </script>
 
 <template>
-    <Card class="p-5">
-      <template #header>
-        <Header :isLogin="isLogin" :logo="user?.fullname.charAt(0)" />
-        <Divider />
-      </template>
-      <template #content>
-        <main class="flex gap-5 -mt-5">
-          <SideSection :user="user"/>
-          <FeedSection :status="isLogin"/>
-          <MemberSection/>
-        </main>
-      </template>
-    </Card>
+  <main class="flex flex-col gap-2 min-h-screen">
+    <Header :isLogin="isLogin" />
+    <AddPostAction :isLogin="isLogin" />
+    <Divider>
+      <p class="text-[0.5rem]">Feed</p>
+    </Divider>
+    <Feed :feeds="feeds" />
+  </main>
+  <Footer />
 </template>
+
+<style scoped></style>

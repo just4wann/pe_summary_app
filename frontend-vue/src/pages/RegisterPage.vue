@@ -73,8 +73,8 @@ const regist = async () => {
             </div>
 
             <button type="submit" class="flex items-center justify-center gap-3 mt-2 py-2.5 rounded-lg bg-slate-700 text-slate-50 hover:cursor-pointer hover:bg-slate-800" @click="regist()">
-              <i class="pi pi-user-plus" style="font-size: 0.8rem;"></i>
-              <p class="text-xs ">Register</p>
+              <i class="pi pi-user-plus" style="font-size: 0.8rem"></i>
+              <p class="text-xs">Register</p>
             </button>
           </div>
           <p class="text-xs">Already have account? <RouterLink to="/login" class="poppins-bold underline">Login here</RouterLink></p>
@@ -86,4 +86,5 @@ const regist = async () => {
   </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>
