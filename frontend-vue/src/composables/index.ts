@@ -56,6 +56,7 @@ export class FeedAPI {
   }
 
   public async getFeedUser(feeds: Ref<FeedOfUserType[]>) {
+    feeds.value.pop()
     try {
       const res = await fetch(import.meta.env.VITE_API_GET_FEED_USER_URL, {
         method: 'GET',
@@ -117,6 +118,21 @@ export class UserAPI {
       router.push('/');
     } catch (error) {
       this.toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 });
+    }
+  }
+
+  public async userLogout(): Promise<boolean> {
+    try {
+      const res = await fetch(import.meta.env.VITE_API_USER_LOGOUT_URL, {
+        method: 'POST',
+        credentials: 'include'
+      })
+
+      const result = await res.json();
+      if (result.statusCode !== 200) return false;
+      return true;
+    } catch (error) {
+      return false;
     }
   }
 

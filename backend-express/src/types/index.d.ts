@@ -24,6 +24,13 @@ export interface LoginUserRequest extends Request {
 
 export interface PostDataRequest extends Request, Post {}
 
+export interface PostUpdateRequest extends Request {
+    title?: string;
+    description?: string;
+    factory?: string;
+    status?: string;
+}
+
 export interface JwtPayload {
     user: string;
     iat: number;

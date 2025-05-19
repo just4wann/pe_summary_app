@@ -1,4 +1,5 @@
 export type FeedType = {
+  id: number;
   title: string;
   description: string;
   factory: string;
@@ -8,6 +9,7 @@ export type FeedType = {
 };
 
 export type FeedOfUserType = {
+  id: number;
   title: string;
   description: string;
   factory: string;

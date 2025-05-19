@@ -29,6 +29,8 @@ import Tooltip from 'primevue/tooltip';
 import SpeedDial from 'primevue/speeddial';
 import FileUpload from 'primevue/fileupload';
 import Paginator from 'primevue/paginator';
+import Message from 'primevue/message';
+import ConfirmationService from 'primevue/confirmationservice';
 
 import MainPage from './pages/MainPage.vue';
 import LoginPage from './pages/LoginPage.vue';
@@ -86,6 +88,7 @@ app.use(PrimeVue, {
   },
 });
 app.use(ToastService);
+app.use(ConfirmationService);
 
 app.component('Button', Button);
 app.component('InputText', InputText);
@@ -112,6 +115,7 @@ app.component('ConfirmPopup', ConfirmPopup);
 app.component('SpeedDial', SpeedDial);
 app.component('FileUpload', FileUpload);
 app.component('Paginator', Paginator);
+app.component('Message', Message);
 
 app.directive('focustrap', FocusTrap);
 app.directive('tooltip', Tooltip);

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onBeforeMount, onMounted, ref } from 'vue';
 import { useToast } from 'primevue';
 
 import { type FeedType, type UserType } from '../types';
@@ -18,14 +18,14 @@ const user = ref<UserType | null | undefined>();
 
 const feeds = ref<FeedType[]>([])
 
-onMounted(async () => {
+onBeforeMount(async () => {
   user.value = await userAPI.getCurrentUser();
   if (user.value != null) {
     isLogin.value = true;
   }
   
   feedAPI.getAllFeed(feeds)
-});
+})
 </script>
 
 <template>

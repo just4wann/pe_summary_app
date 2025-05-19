@@ -1,4 +1,4 @@
-import type { LoginUserRequest, PostDataRequest, RegisterUserRequest, ResponseBody } from '@/types/index.js';
+import type { LoginUserRequest, PostDataRequest, PostUpdateRequest, RegisterUserRequest, ResponseBody } from '@/types/index.js';
 import { ResponseError } from '@/error/index.js';
 import { User, Post } from '@/model/index.js';
 import bcrypt from 'bcrypt';
@@ -184,7 +184,7 @@ export class PostService {
   static async getByUsername(user: User): Promise<ResponseBody<Post[]>> {
     const posts = await Post.findAll({
       where: {
-        UserId: user.id
+        UserId: user.id,
       },
     });
 
@@ -209,6 +209,54 @@ export class PostService {
       statusCode: 200,
       message: 'All Post',
       data: post,
+    };
+  }
+
+  static async update(updateData: PostUpdateRequest, postIdQuery: string): Promise<ResponseBody<string>> {
+    const post = await Post.findOne({
+      where: {
+        id: Number(postIdQuery),
+      },
+    });
+
+    if (!post) throw new ResponseError(404, 'not found');
+
+    const affected = await Post.update(
+      {
+        title: updateData.title == '' ? post.title : updateData.title,
+        description: updateData.description == '' ? post.description : updateData.description,
+        factory: updateData.factory == '' ? post.factory : updateData.factory,
+        status: updateData.status == '' ? post.status : updateData.status,
+      },
+      {
+        where: {
+          id: Number(postIdQuery),
+        },
+      }
+    );
+
+    if (affected[0] < 0) throw new ResponseError(400, 'Error during update');
+
+    return {
+      statusCode: 200,
+      message: 'OK',
+      data : 'Updated'
+    }
+  }
+
+  static async delete(postIdQuery: string): Promise<ResponseBody<string>> {
+    const affected = await Post.destroy({
+      where: {
+        id: Number(postIdQuery),
+      },
+    });
+
+    if (affected < 0) throw new ResponseError(400, 'Error during delete process');
+
+    return {
+      statusCode: 200,
+      message: 'OK',
+      data: `Post id : ${postIdQuery} deleted`,
     };
   }
 }
