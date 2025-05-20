@@ -1,5 +1,6 @@
 import type { Request } from "express";
-import { User, Post } from "@/model/index.ts";
+import User from "@/model/user.model.ts";
+import Post from "@/model/post.model.ts";
 
 declare global {
     namespace Express {

@@ -1,5 +1,7 @@
 import type { Router } from 'express';
-import { UserController, PostController, PasswordController } from '@/controller/index.js';
+import UserController from '@/controller/user.controller.js';
+import PostController from '@/controller/post.controller.js';
+import PasswordController from '@/controller/password.controller.js';
 
 export class Routes {
   constructor(private publicRouter: Router, private apiRouter: Router) {}
