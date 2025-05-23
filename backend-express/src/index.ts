@@ -15,23 +15,23 @@ app.use(express.urlencoded({
 }))
 app.use(cors({
   origin: process.env.URL_ALLOWED_ORIGIN,
-  methods: ["GET", "POST"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }))
 app.use(cookieParser());
 
 const publicRouter = express.Router();
-const apiRouter = express.Router();
+const protectedRouter = express.Router();
 const sequelize = new SequelizeDB();
-const routes = new Routes(publicRouter, apiRouter);
+const routes = new Routes(publicRouter, protectedRouter);
 
 routes.setupPublicRouter();
 
-apiRouter.use(authMiddleware);
-routes.setupApiRouter();
+protectedRouter.use(authMiddleware);
+routes.setupProtectedRouter();
 
 app.use('/api', publicRouter);
-app.use('/api/current', apiRouter);
+app.use('/api/current', protectedRouter);
 app.use(errorMiddleware);
 
 app.listen(Number(process.env.SERVER_PORT), process.env.SERVER_HOST!, () => {

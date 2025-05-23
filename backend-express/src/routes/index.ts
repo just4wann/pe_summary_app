@@ -4,7 +4,7 @@ import PostController from '@/controller/post.controller.js';
 import PasswordController from '@/controller/password.controller.js';
 
 export class Routes {
-  constructor(private publicRouter: Router, private apiRouter: Router) {}
+  constructor(private publicRouter: Router, private protectedRouter: Router) {}
 
   setupPublicRouter() {
     this.publicRouter.post('/user/regist', UserController.userRegistration);
@@ -17,11 +17,13 @@ export class Routes {
     this.publicRouter.post('/password/change', PasswordController.changePassword);
   }
 
-  setupApiRouter() {
-    this.apiRouter.post('/post/add', PostController.create);
-    this.apiRouter.get('/post/get', PostController.get);
+  setupProtectedRouter() {
+    this.protectedRouter.post('/post/add', PostController.create);
+    this.protectedRouter.get('/post/get', PostController.get);
+    this.protectedRouter.put('/post/update/:id', PostController.update);
+    this.protectedRouter.delete('/post/delete/:id', PostController.delete);
 
-    this.apiRouter.get('/user', UserController.getUser);
-    this.apiRouter.post('/user/logout', UserController.userLogout);
+    this.protectedRouter.get('/user', UserController.getUser);
+    this.protectedRouter.post('/user/logout', UserController.userLogout);
   }
 }

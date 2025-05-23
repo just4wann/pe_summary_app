@@ -1,7 +1,7 @@
-import { ResponseError } from '@/error/index.js';
+import ResponseError from '@/error/index.js';
 import type { Request, Response, NextFunction } from 'express';
 import { ValidationError, Op } from 'sequelize';
-import { User } from '@/model/index.js';
+import User from '@/model/user.model.js';
 import jwt from 'jsonwebtoken';
 import { JwtPayload } from '@/types/index.js';
 

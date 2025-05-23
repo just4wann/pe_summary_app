@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'primevue';
-import { PasswordAPI } from '../composables';
+import { PasswordAPI } from '../composables/password';
 
 const router = useRouter();
 

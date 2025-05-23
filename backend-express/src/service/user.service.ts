@@ -107,33 +107,6 @@ export default class UserService {
     };
   }
 
-  static async updatePassword(user: User, newPassword: string): Promise<ResponseBody<string>> {
-    const isPasswordSame = await bcrypt.compare(newPassword, user.password);
-
-    if (isPasswordSame) throw new ResponseError(400, 'Thats your old password dude, try something else.');
-
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-    const updatePassword = await User.update(
-      {
-        password: hashedPassword,
-      },
-      {
-        where: {
-          username: user.username,
-        },
-      }
-    );
-
-    if (updatePassword[0] < 0) throw new ResponseError(400, 'Error during change password');
-
-    return {
-      statusCode: 200,
-      message: 'OK',
-      data: 'Success change password',
-    };
-  }
-
   static async getAll(): Promise<ResponseBody<User[]>> {
     const users = await User.findAll({
       attributes: ['id', 'username', 'fullname', 'nik'],

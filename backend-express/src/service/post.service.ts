@@ -27,6 +27,7 @@ export default class PostService {
       where: {
         UserId: user.id,
       },
+      order: ["createdAt"]
     });
 
     return {
@@ -44,6 +45,7 @@ export default class PostService {
           model: User,
         },
       ],
+      order: ["createdAt"]
     });
     if (post.length === 0) throw new ResponseError(404, 'Post not found');
     return {

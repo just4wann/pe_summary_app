@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 import { useToast } from 'primevue';
 import type { UserType } from '../types';
-import { UserAPI } from '../composables';
+import { UserAPI } from '../composables/users';
 
 const userAPI = new UserAPI(useToast())
 const users = ref<UserType[]>([]);

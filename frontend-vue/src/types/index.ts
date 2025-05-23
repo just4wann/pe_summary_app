@@ -15,7 +15,7 @@ export type FeedOfUserType = {
   factory: string;
   status: string;
   createdAt: string;
-}
+};
 
 export type UserType = {
   id: number;
@@ -69,4 +69,11 @@ export type UserPostType = {
   fullname: string;
   username: string;
   nik: string;
+};
+
+export type FeedUpdateBodyType = {
+  title?: string;
+  description?: string;
+  factory?: string;
+  status?: string;
 };

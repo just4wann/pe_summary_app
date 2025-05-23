@@ -1,5 +1,6 @@
 import { Sequelize, DataTypes } from 'sequelize';
-import { User, Post } from '@/model/index.js';
+import User from '@/model/user.model.js';
+import Post from '@/model/post.model.js';
 
 const sequelize: Sequelize = new Sequelize(process.env.DATABASE_URL!);
 

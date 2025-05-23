@@ -3,8 +3,9 @@ import { useRouter } from 'vue-router';
 import { onBeforeMount, ref } from 'vue';
 import { useConfirm, useToast } from 'primevue';
 
-import { type FeedOfUserType, type UserType } from '../types';
-import { FeedAPI, UserAPI } from '../composables';
+import { type FeedOfUserType, type FeedUpdateBodyType, type UserType } from '../types';
+import { FeedAPI } from '../composables/feeds';
+import { UserAPI } from '../composables/users';
 import { generateTimestamp, formateDescription } from '../utils';
 
 const router = useRouter();
@@ -26,6 +27,21 @@ const feeds = ref<FeedOfUserType[]>([
   },
 ]);
 
+const update = async (id: number) => {
+  const data: FeedUpdateBodyType = {
+    title: 'Test update',
+    description: 'test update',
+    factory: 'Factory 1',
+    status: 'Solved'
+  }
+
+  await feedAPI.updateFeedUser(data, id)
+}
+
+const destroy = async (id: number) => {
+  await feedAPI.deleteFeedUser(id);
+}
+
 const confirm = useConfirm();
 
 const items = ref([
@@ -33,14 +49,14 @@ const items = ref([
     label: 'Edit',
     icon: 'pi pi-pencil',
     command: () => {
-      console.log('edit id : ', feeds.value[contentOf.value].id)
+      update(feeds.value[contentOf.value].id)
     },
   },
   {
     label: 'Delete',
     icon: 'pi pi-trash',
     command: () => {
-      console.log('delete id : ', feeds.value[contentOf.value].id)
+      destroy(feeds.value[contentOf.value].id)
     },
   },
 ]);
@@ -106,10 +122,9 @@ onBeforeMount(async () => {
       </button>
     </header>
     <section v-if="!user" class="px-2 bg-white flex flex-col items-center gap-2 h-screen -mt-2 p-50">
-      <p class="text-sm">Sign In First</p>
-      <RouterLink to="/login" class="flex items-center gap-2 text-xs bg-slate-200 text-slate-700 py-1.5 px-2.5 rounded-md hover:cursor-pointer">
-        <i class="pi pi-sign-in" style="font-size: 0.7rem" />
-        <p class="text-[0.6rem]">Sign In</p>
+      <RouterLink to="/login" class="flex items-center gap-2 text-xs bg-slate-200 text-slate-700 py-3.5 px-4.5 rounded-md hover:cursor-pointer">
+        <i class="pi pi-sign-in" style="font-size: 0.8rem" />
+        <p class="text-xs">Sign In</p>
       </RouterLink>
     </section>
     <section v-else class="px-2">
@@ -159,7 +174,7 @@ onBeforeMount(async () => {
                             </button>
                           </template>
                           <template #item="{ item, toggleCallback }">
-                            <div class="flex flex-col items-center justify-between p-2 bg-slate-100 rounded-full" @click="toggleCallback">
+                            <div class="flex flex-col items-center justify-between p-2 bg-slate-200 rounded-full" @click="toggleCallback">
                               <span :class="item.icon" style="font-size: 0.8rem;"/>
                             </div>
                           </template>

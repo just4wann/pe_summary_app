@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'primevue';
-import { UserAPI } from '../composables';
+import { UserAPI } from '../composables/users';
 import type { UserLoginRequestBody } from '../types';
 
 const toast = useToast();

@@ -3,7 +3,8 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import type { FactoryType, FeedBodyType, ClearValueType } from '../types';
-import { Function, FeedAPI } from '../composables';
+import { Function } from '../composables';
+import { FeedAPI } from '../composables/feeds';
 import { factoryData } from '../constant';
 import { useToast } from 'primevue';
 

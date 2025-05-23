@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { onBeforeMount, onMounted, ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { useToast } from 'primevue';
 
 import { type FeedType, type UserType } from '../types';
-import { FeedAPI, UserAPI } from '../composables';
+import { UserAPI } from '../composables/users';
+import { FeedAPI } from '../composables/feeds';
 
 import Header from '../components/Header.vue';
 import Footer from '../components/Footer.vue';
