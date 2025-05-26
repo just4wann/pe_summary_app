@@ -1,12 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useToast } from 'primevue';
 import { PasswordAPI } from '../composables/password';
 
-const router = useRouter();
-
-const passwordAPI = new PasswordAPI(useToast());
+const passwordAPI = new PasswordAPI();
 
 const user = ref<string>('');
 const newPassword = ref<string>('');
@@ -17,9 +13,7 @@ const find = async () => {
   const reqBody: { user: string } = {
     user: user.value,
   };
-  const result = await passwordAPI.findUser(reqBody);
-  if (!result) return;
-  isAllowed.value = true;
+  isAllowed.value = await passwordAPI.findUser(reqBody);
 };
 
 const change = async () => {
@@ -27,9 +21,7 @@ const change = async () => {
     user: user.value,
     password: reTypePassword.value,
   };
-  const result = await passwordAPI.changePassword(reqBody);
-  if (!result) return;
-  router.push('/login');
+  await passwordAPI.changePassword(reqBody);
 };
 </script>
 

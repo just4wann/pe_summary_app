@@ -1,9 +1,15 @@
 import type { Ref } from 'vue';
-import type { ToastServiceMethods } from 'primevue';
+import { useToast, type ToastServiceMethods } from 'primevue';
 import type { FeedType, FeedBodyType, FeedOfUserType, FeedUpdateBodyType } from '../types';
+import { useRouter, type Router } from 'vue-router';
 
 export class FeedAPI {
-  constructor(private toast: ToastServiceMethods) {}
+  private toast: ToastServiceMethods;
+  private router: Router;
+  constructor() {
+    this.toast = useToast();
+    this.router = useRouter();
+  }
   public async getAllFeed(feeds: Ref<FeedType[]>) {
     try {
       const res = await fetch(import.meta.env.VITE_API_GET_FEED_ALL_URL, {
@@ -34,6 +40,7 @@ export class FeedAPI {
         return false;
       }
       this.toast.add({ severity: 'success', summary: 'Post Uploaded', detail: 'Your post has been added to feed', life: 3000 });
+      this.router.push('/')
       return true;
     } catch (error) {
       this.toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 });

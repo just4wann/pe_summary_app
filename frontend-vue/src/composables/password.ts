@@ -1,7 +1,13 @@
-import type { ToastServiceMethods } from 'primevue';
+import { useToast, type ToastServiceMethods } from 'primevue';
+import { useRouter, type Router } from 'vue-router';
 
 export class PasswordAPI {
-  constructor(private toast: ToastServiceMethods) {}
+  private toast: ToastServiceMethods;
+  private router: Router;
+  constructor() {
+    this.toast = useToast();
+    this.router = useRouter();
+  }
 
   public async findUser(userInfo: { user: string }): Promise<boolean> {
     try {
@@ -38,6 +44,7 @@ export class PasswordAPI {
         this.toast.add({ severity: 'error', summary: 'Error', detail: result.message, life: 3000 });
         return false;
       }
+      this.router.push('/login');
       return true;
     } catch (error) {
       this.toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 });

@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { useToast } from 'primevue';
 import type { UserType } from '../types';
 import { UserAPI } from '../composables/users';
 
-const userAPI = new UserAPI(useToast())
+const userAPI = new UserAPI()
 const users = ref<UserType[]>([]);
 
 onMounted(() => {

@@ -6,10 +6,9 @@ import type { FactoryType, FeedBodyType, ClearValueType } from '../types';
 import { Function } from '../composables';
 import { FeedAPI } from '../composables/feeds';
 import { factoryData } from '../constant';
-import { useToast } from 'primevue';
 
 const router = useRouter();
-const feedAPI = new FeedAPI(useToast());
+const feedAPI = new FeedAPI();
 
 const titleValue = ref<string>('');
 const descriptionValue = ref<string>('');

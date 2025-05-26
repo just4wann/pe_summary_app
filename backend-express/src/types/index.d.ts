@@ -37,3 +37,9 @@ export interface JwtPayload {
     iat: number;
     exp: number
 }
+
+export interface SearchQuery {
+    q?: string;
+    user?: string;
+    post?: string;
+}

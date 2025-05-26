@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onBeforeMount, ref } from 'vue';
-import { useToast } from 'primevue';
 
 import { type FeedType, type UserType } from '../types';
 import { UserAPI } from '../composables/users';
@@ -11,8 +10,8 @@ import Footer from '../components/Footer.vue';
 import AddPostAction from '../components/AddPostAction.vue';
 import Feed from '../components/Feed/Feed.vue';
 
-const userAPI = new UserAPI(useToast());
-const feedAPI = new FeedAPI(useToast());
+const userAPI = new UserAPI();
+const feedAPI = new FeedAPI();
 
 const isLogin = ref<boolean>(false);
 const user = ref<UserType | null | undefined>();

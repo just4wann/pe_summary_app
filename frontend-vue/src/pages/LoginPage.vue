@@ -1,14 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useToast } from 'primevue';
 import { UserAPI } from '../composables/users';
 import type { UserLoginRequestBody } from '../types';
 
-const toast = useToast();
-const router = useRouter();
-
-const userAPI = new UserAPI(toast);
+const userAPI = new UserAPI();
 const user = ref<string>('');
 const password = ref<string>('');
 
@@ -18,7 +13,7 @@ const login = async () => {
     password: password.value,
   };
 
-  await userAPI.userLogin(body, router);
+  await userAPI.userLogin(body);
 };
 </script>
 

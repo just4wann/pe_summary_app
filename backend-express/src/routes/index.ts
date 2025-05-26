@@ -2,6 +2,7 @@ import type { Router } from 'express';
 import UserController from '@/controller/user.controller.js';
 import PostController from '@/controller/post.controller.js';
 import PasswordController from '@/controller/password.controller.js';
+import SearchController from '@/controller/search.controller.js';
 
 export class Routes {
   constructor(private publicRouter: Router, private protectedRouter: Router) {}
@@ -15,6 +16,8 @@ export class Routes {
 
     this.publicRouter.post('/password/user', PasswordController.findUser);
     this.publicRouter.post('/password/change', PasswordController.changePassword);
+
+    this.publicRouter.get('/search', SearchController.search);
   }
 
   setupProtectedRouter() {

@@ -1,14 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useToast } from 'primevue';
 import { UserAPI } from '../composables/users';
 import type { UserRegistRequestBody } from '../types';
 
-const toast = useToast();
-const router = useRouter();
-
-const userAPI = new UserAPI(toast);
+const userAPI = new UserAPI();
 
 const username = ref<string>('');
 const fullname = ref<string>('');
@@ -24,7 +19,7 @@ const regist = async () => {
     password: password.value,
   };
 
-  await userAPI.userRegistration(body, router);
+  await userAPI.userRegistration(body);
 };
 </script>
 
