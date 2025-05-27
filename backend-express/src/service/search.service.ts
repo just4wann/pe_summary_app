@@ -5,39 +5,49 @@ import { Op } from 'sequelize';
 
 export default class SearchService {
   public static async search(query: SearchQuery): Promise<ResponseBody<Post[]>> {
-    let posts: Post[] = [];
-    if (query.post == 'true') {
-      posts = await Post.findAll({
-        where: {
-          [Op.or]: [
-            {
-              title: {
-                [Op.like]: `%${query.q}%`,
-              },
+    if (!query.q)
+      return {
+        statusCode: 404,
+        message: 'Not Found',
+        data: [],
+      };
+    const posts = await Post.findAll({
+      where: {
+        [Op.or]: [
+          {
+            title: {
+              [Op.like]: `%${query.q}%`,
             },
-            {
-              description: {
-                [Op.like]: `%${query.q}%`,
-              },
+          },
+          {
+            description: {
+              [Op.like]: `%${query.q}%`,
             },
-            {
-              factory: {
-                [Op.like]: `%${query.q}%`,
-              },
+          },
+          {
+            factory: {
+              [Op.like]: `%${query.q}%`,
             },
-            {
-              status: {
-                [Op.like]: `%${query.q}%`,
-              },
+          },
+          {
+            status: {
+              [Op.like]: `%${query.q}%`,
             },
-          ],
-        },
-        include: {
-            model: User,
-            attributes: ['id', 'username', 'fullname', 'nik']
-        }
-      });
-    }
+          },
+        ],
+      },
+      include: {
+        model: User,
+        attributes: ['id', 'username', 'fullname', 'nik'],
+      },
+    });
+
+    if (posts.length === 0)
+      return {
+        statusCode: 404,
+        message: 'Not found',
+        data: [],
+      };
     return {
       statusCode: 200,
       message: 'OK',

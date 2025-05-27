@@ -5,6 +5,7 @@ export type FeedType = {
   factory: string;
   status: string;
   createdAt: string;
+  updatedAt: string;
   User: UserPostType;
 };
 
@@ -15,6 +16,7 @@ export type FeedOfUserType = {
   factory: string;
   status: string;
   createdAt: string;
+  updatedAt: string;
 };
 
 export type UserType = {

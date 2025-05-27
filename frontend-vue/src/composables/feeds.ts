@@ -81,9 +81,13 @@ export class FeedAPI {
       });
 
       const result = await res.json();
-      if (result.statusCode !== 200) return false;
+      if (result.statusCode !== 200) {
+        this.toast.add({ severity: 'error', summary: 'Error', detail: result.message, life: 3000 });
+        return false
+      };
       return true; 
     } catch (error) {
+      this.toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 });
       return false;
     }
   }

@@ -31,6 +31,7 @@ const feeds = ref<FeedOfUserType[]>([
     factory: '',
     status: '',
     createdAt: '',
+    updatedAt: ''
   },
 ]);
 
@@ -243,6 +244,7 @@ onBeforeMount(async () => {
                     <p class="leading-none" v-for="(line, index) in formateDescription(feeds[contentOf].description)" :key="index">
                       {{ line }}
                     </p>
+                    <p v-if="feeds[contentOf].createdAt !== feeds[contentOf].updatedAt" class="text-[0.5rem] text-slate-400 self-end mt-2">Edited on {{ generateTimestamp(feeds[contentOf].updatedAt) }}</p>
                   </section>
                   <Dialog v-model:visible="visible" modal :closable="false" :style="{ width: '20rem' }">
                     <template #header>
@@ -297,6 +299,7 @@ onBeforeMount(async () => {
                       </button>
                     </template>
                   </Dialog>
+                  <Toast/>
                 </template>
               </Card>
             </section>
