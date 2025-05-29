@@ -16,22 +16,22 @@ export default class SearchService {
         [Op.or]: [
           {
             title: {
-              [Op.like]: `%${query.q}%`,
+              [Op.iLike]: `%${query.q}%`,
             },
           },
           {
             description: {
-              [Op.like]: `%${query.q}%`,
+              [Op.iLike]: `%${query.q}%`,
             },
           },
           {
             factory: {
-              [Op.like]: `%${query.q}%`,
+              [Op.iLike]: `%${query.q}%`,
             },
           },
           {
             status: {
-              [Op.like]: `%${query.q}%`,
+              [Op.iLike]: `%${query.q}%`,
             },
           },
         ],
