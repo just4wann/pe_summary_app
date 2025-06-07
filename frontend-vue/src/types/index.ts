@@ -4,6 +4,7 @@ export type FeedType = {
   description: string;
   factory: string;
   status: string;
+  imageUrl?: string[];
   createdAt: string;
   updatedAt: string;
   User: UserPostType;
@@ -15,6 +16,7 @@ export type FeedOfUserType = {
   description: string;
   factory: string;
   status: string;
+  imageUrl?: string[];
   createdAt: string;
   updatedAt: string;
 };
@@ -34,8 +36,9 @@ export type FactoryType = {
 export type FeedBodyType = {
   title: string;
   description: string;
-  factory: string;
+  factory: FactorySelectedType
   status: string;
+  imageUrl?: string[]
 };
 
 export type ClearValueType = {
@@ -76,6 +79,37 @@ export type UserPostType = {
 export type FeedUpdateBodyType = {
   title?: string;
   description?: string;
-  factory?: string;
+  factory?: FactorySelectedType;
   status?: string;
 };
+
+export type ProfileUpdateBodyType = {
+  fullname?: string;
+  username?: string;
+  nik?: string;
+}
+
+export type FetchResponseType<T> = {
+  statusCode: number;
+  message: string;
+  data: T
+}
+
+export type FetchResultType = {
+  status: boolean;
+  message: any;
+}
+
+export type TroubleDataRecordByDay = {
+  value: number;
+  timestamp: string;
+};
+
+export type TroubleDataRecordByFactory = {
+  f1: number;
+  f2: number;
+  f3: number;
+  f4: number;
+  subpro: number;
+  timestamp: string;
+}

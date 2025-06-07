@@ -15,7 +15,7 @@ defineProps<{
           <p class="font-bold text-[0.7rem]">{{ feed.User.fullname.split(' ')[0] }}</p>
           <p class="text-[0.7rem] text-slate-500">@{{ feed.User.username }}</p>
         </div>
-        <p class="text-[0.6rem] text-slate-400">{{ generateTimestamp(feed.createdAt) }}</p>
+        <p class="text-[0.6rem] text-slate-400">{{ generateTimestamp(feed.createdAt)[0] }}</p>
       </div>
     </div>
     <div class="text-[0.1rem] mr-2 flex flex-col gap-1">

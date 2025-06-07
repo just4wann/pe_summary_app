@@ -5,7 +5,7 @@ defineProps<{
 </script>
 <template>
   <header class="flex justify-between items-center bg-white p-5">
-    <h1 class="text-lg">SummaryPE</h1>
+    <h1 class="text-lg poppins-semibold">SummaryPE</h1>
     <section class="flex justify-center items-center" v-if="isLogin">
       <OverlayBadge severity="danger">
         <i class="pi pi-bell" style="font-size: 1.1rem"></i>

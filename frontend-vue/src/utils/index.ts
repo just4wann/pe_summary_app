@@ -2,9 +2,9 @@ export function formateDescription(value: string): string[] {
   return value.split('\n');
 };
 
-export function generateTimestamp(createdAt: string): string {
+export function generateTimestamp(createdAt: string | Date): string[] {
   const date = new Date(createdAt);
-  const formatDate = date.toLocaleDateString('id-ID', {
+  const formatDate = date.toLocaleDateString('en-US', {
     day: '2-digit',
     month: 'long',
   });
@@ -15,5 +15,9 @@ export function generateTimestamp(createdAt: string): string {
     hour12: false,
   });
 
-  return `${formatDate} at ${time}`;
+  return [
+    `${formatDate} at ${time}`,
+    `${formatDate}`
+  ];
+    
 };

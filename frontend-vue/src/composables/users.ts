@@ -1,16 +1,13 @@
 import type { Ref } from 'vue';
 import { useRouter, type Router } from 'vue-router';
-import { useToast, type ToastServiceMethods } from 'primevue';
-import type { UserType, UserRegistRequestBody, UserLoginRequestBody } from '../types';
+import type { UserType, UserRegistRequestBody, UserLoginRequestBody, ProfileUpdateBodyType, FetchResultType, FetchResponseType } from '../types';
 
 export class UserAPI {
   private router: Router;
-  private toast: ToastServiceMethods;
   constructor() {
     this.router = useRouter();
-    this.toast = useToast();
   }
-  public async userRegistration(requestBody: UserRegistRequestBody) {
+  public async userRegistration<T>(requestBody: UserRegistRequestBody): Promise<FetchResultType> {
     try {
       const res = await fetch(import.meta.env.VITE_API_USER_REGISTER_URL, {
         method: 'POST',
@@ -19,18 +16,26 @@ export class UserAPI {
         },
         body: JSON.stringify(requestBody),
       });
-      const result = await res.json();
+      const result: FetchResponseType<T> = await res.json();
       if (result.statusCode != 200) {
-        this.toast.add({ severity: 'error', summary: 'Error', detail: result.message, life: 3000 });
-        return;
+        return {
+          status: false,
+          message: result.message,
+        };
       }
-      this.toast.add({ severity: 'success', summary: 'Registration Success', detail: 'Your account registration success', life: 3000 });
       this.router.push('/login');
+      return {
+        status: true,
+        message: result.message,
+      };
     } catch (error) {
-      this.toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 });
+      return {
+        status: false,
+        message: error,
+      };
     }
   }
-  public async userLogin(requestBody: UserLoginRequestBody) {
+  public async userLogin<T>(requestBody: UserLoginRequestBody): Promise<FetchResultType> {
     try {
       const res = await fetch(import.meta.env.VITE_API_USER_LOGIN_URL, {
         method: 'POST',
@@ -40,31 +45,60 @@ export class UserAPI {
         credentials: 'include',
         body: JSON.stringify(requestBody),
       });
-      const result = await res.json();
+      const result: FetchResponseType<T> = await res.json();
       if (result.statusCode != 200) {
-        this.toast.add({ severity: 'error', summary: 'Error', detail: result.message, life: 3000 });
-        return;
+        return {
+          status: false,
+          message: result.message,
+        };
       }
-      this.toast.add({ severity: 'success', summary: 'Login Success', detail: 'Your account login success', life: 3000 });
-      this.router.push('/');
+      this.router.push({
+        name: 'home',
+        params: {
+          id: 'main'
+        }
+      });
+      return {
+        status: true,
+        message: result.message,
+      };
     } catch (error) {
-      this.toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 });
+      return {
+        status: false,
+        message: error,
+      };
     }
   }
 
-  public async userLogout(): Promise<boolean> {
+  public async userLogout<T>(): Promise<FetchResultType> {
     try {
       const res = await fetch(import.meta.env.VITE_API_USER_LOGOUT_URL, {
         method: 'POST',
-        credentials: 'include'
-      })
+        credentials: 'include',
+      });
 
-      const result = await res.json();
-      if (result.statusCode !== 200) return false;
-      this.router.push('/');
-      return true;
+      const result: FetchResponseType<T> = await res.json();
+      if (result.statusCode != 200) {
+        return {
+          status: false,
+          message: result.message,
+        };
+      }
+      this.router.push({
+        name: 'home',
+        params: {
+          id: 'main'
+        }
+      });
+      return {
+        status: true,
+        message: result.message,
+      };
     } catch (error) {
-      return false;
+      return {
+        status: false,
+        message: error,
+      };
     }
   }
 
@@ -74,14 +108,12 @@ export class UserAPI {
         method: 'GET',
         credentials: 'include',
       });
-      const result = await res.json();
+      const result: FetchResponseType<UserType | null> = await res.json();
       if (result.statusCode != 200) {
-        this.toast.add({ severity: 'error', summary: 'Error', detail: result.message, life: 3000 });
         return null;
       }
       return result.data;
     } catch (error) {
-      this.toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 });
       return null;
     }
   }
@@ -91,12 +123,40 @@ export class UserAPI {
       const res = await fetch(import.meta.env.VITE_API_GET_USER_ALL_URL, {
         method: 'GET',
       });
-      const result = await res.json();
+      const result: FetchResponseType<UserType[]> = await res.json();
       for (let i in result.data) {
         users.value.unshift(result.data[i]);
       }
+    } catch (error) {}
+  }
+
+  public async updateUserProfile<T>(data: ProfileUpdateBodyType): Promise<FetchResultType> {
+    try {
+      const res = await fetch(import.meta.env.VITE_API_UPDATE_USER_PROFILE_URL, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+        credentials: 'include',
+      });
+
+      const result: FetchResponseType<T> = await res.json();
+      if (result.statusCode != 200) {
+        return {
+          status: false,
+          message: result.data,
+        };
+      }
+      return {
+        status: true,
+        message: result.data,
+      };
     } catch (error) {
-      this.toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 });
+      return {
+        status: false,
+        message: error,
+      };
     }
   }
 }

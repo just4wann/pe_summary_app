@@ -1,15 +1,13 @@
-import { useToast, type ToastServiceMethods } from 'primevue';
 import { useRouter, type Router } from 'vue-router';
+import type { FetchResponseType, FetchResultType } from '../types';
 
 export class PasswordAPI {
-  private toast: ToastServiceMethods;
   private router: Router;
   constructor() {
-    this.toast = useToast();
     this.router = useRouter();
   }
 
-  public async findUser(userInfo: { user: string }): Promise<boolean> {
+  public async findUser<T>(userInfo: { user: string }): Promise<FetchResultType> {
     try {
       const res = await fetch(import.meta.env.VITE_API_FIND_USER_URL, {
         method: 'POST',
@@ -18,19 +16,26 @@ export class PasswordAPI {
         },
         body: JSON.stringify(userInfo),
       });
-      const result = await res.json();
+      const result: FetchResponseType<T> = await res.json();
       if (result.statusCode !== 200) {
-        this.toast.add({ severity: 'error', summary: 'Error', detail: result.message, life: 3000 });
-        return false;
+        return {
+          status: false,
+          message: result.message,
+        };
       }
-      return true;
+      return {
+        status: true,
+        message: result.message,
+      };
     } catch (error) {
-      this.toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 });
-      return false;
+      return {
+        status: false,
+        message: error,
+      };
     }
   }
 
-  public async changePassword(newPassword: { user: string; password: string }): Promise<boolean> {
+  public async changePassword<T>(newPassword: { user: string; password: string }): Promise<FetchResultType> {
     try {
       const res = await fetch(import.meta.env.VITE_API_CHANGE_PASSWORD_URL, {
         method: 'POST',
@@ -39,16 +44,23 @@ export class PasswordAPI {
         },
         body: JSON.stringify(newPassword),
       });
-      const result = await res.json();
+      const result: FetchResponseType<T> = await res.json();
       if (result.statusCode !== 200) {
-        this.toast.add({ severity: 'error', summary: 'Error', detail: result.message, life: 3000 });
-        return false;
+        return {
+          status: false,
+          message: result.message,
+        };
       }
       this.router.push('/login');
-      return true;
+      return {
+        status: true,
+        message: result.message,
+      };
     } catch (error) {
-      this.toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 });
-      return false;
+      return {
+        status: false,
+        message: error,
+      };
     }
   }
 }

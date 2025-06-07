@@ -7,6 +7,8 @@ import FeedInteraction from './FeedInteraction.vue';
 
 defineProps<{
   feeds: FeedType[];
+  messageWhileEmpty?: string;
+  showFeedInteraction: boolean;
 }>();
 </script>
 
@@ -24,12 +26,13 @@ defineProps<{
             createdAt: feed.createdAt,
             updatedAt: feed.updatedAt,
           }"
+          :images="feed.imageUrl ?? []"
         />
-        <Divider />
-        <FeedInteraction :nik="feed.User.nik" />
+        <Divider v-if="showFeedInteraction"/>
+        <FeedInteraction :nik="feed.User.nik" v-if="showFeedInteraction"/>
       </template>
     </Card>
-    <p v-if="feeds.length === 0" class="text-xs text-center">No Feed Available.</p>
+    <p v-if="feeds.length === 0" class="text-xs text-center">{{ messageWhileEmpty }}</p>
   </section>
 </template>
 

@@ -8,15 +8,15 @@ defineProps<{
     <section class="flex gap-2">
       <button class="flex items-center gap-1 p-2 rounded-md hover:bg-slate-50 hover:cursor-pointer active:bg-slate-100">
         <i class="pi pi-comments" style="font-size: 0.7rem" />
-        <p class="poppins-semibold">10</p>
+        <p class="poppins-semibold"></p>
       </button>
       <button class="flex items-center gap-1 p-2 rounded-md hover:bg-slate-50 hover:cursor-pointer active:bg-slate-100">
         <i class="pi pi-thumbs-up" style="font-size: 0.7rem" />
-        <p class="poppins-semibold">99</p>
+        <p class="poppins-semibold"></p>
       </button>
       <button class="flex items-center gap-1 p-2 rounded-md hover:bg-slate-50 hover:cursor-pointer active:bg-slate-100">
         <i class="pi pi-star" style="font-size: 0.7rem" />
-        <p class="poppins-semibold">1</p>
+        <p class="poppins-semibold"></p>
       </button>
     </section>
     <section class="flex items-center gap-1 text-slate-500">

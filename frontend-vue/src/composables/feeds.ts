@@ -1,30 +1,41 @@
 import type { Ref } from 'vue';
-import { useToast, type ToastServiceMethods } from 'primevue';
-import type { FeedType, FeedBodyType, FeedOfUserType, FeedUpdateBodyType } from '../types';
+import type { FeedType, FeedBodyType, FeedOfUserType, FeedUpdateBodyType, FetchResultType, FetchResponseType } from '../types';
 import { useRouter, type Router } from 'vue-router';
 
 export class FeedAPI {
-  private toast: ToastServiceMethods;
   private router: Router;
   constructor() {
-    this.toast = useToast();
     this.router = useRouter();
   }
-  public async getAllFeed(feeds: Ref<FeedType[]>) {
+  public async getAllFeed(feeds: Ref<FeedType[]>): Promise<FetchResultType> {
+    feeds.value = []
     try {
       const res = await fetch(import.meta.env.VITE_API_GET_FEED_ALL_URL, {
         method: 'GET',
       });
-      const result = await res.json();
+      const result: FetchResponseType<FeedType[]> = await res.json();
+      if (result.statusCode !== 200) {
+        return {
+          status: false,
+          message: result.message,
+        };
+      }
       for (let i in result.data) {
         feeds.value.unshift(result.data[i]);
       }
+      return {
+        status: true,
+        message: result.message,
+      };
     } catch (error) {
-      this.toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 });
+      return {
+        status: false,
+        message: error,
+      };
     }
   }
 
-  public async postFeed(feedBody: FeedBodyType): Promise<boolean> {
+  public async postFeed<T>(feedBody: FeedBodyType): Promise<FetchResultType> {
     try {
       const res = await fetch(import.meta.env.VITE_API_POST_FEED_URL, {
         method: 'POST',
@@ -34,22 +45,33 @@ export class FeedAPI {
         credentials: 'include',
         body: JSON.stringify(feedBody),
       });
-      const result = await res.json();
-      if (result.statusCode != 200) {
-        this.toast.add({ severity: 'error', summary: 'Error', detail: result.message, life: 3000 });
-        return false;
+      const result: FetchResponseType<T> = await res.json();
+      if (result.statusCode !== 200) {
+        return {
+          status: false,
+          message: result.message,
+        };
       }
-      this.toast.add({ severity: 'success', summary: 'Post Uploaded', detail: 'Your post has been added to feed', life: 3000 });
-      this.router.push('/')
-      return true;
+      this.router.push({
+        name: 'home',
+        params: {
+          id: 'posted'
+        }
+      });
+      return {
+        status: true,
+        message: result.message,
+      };
     } catch (error) {
-      this.toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 });
-      return false;
+      return {
+        status: false,
+        message: error,
+      };
     }
   }
 
   public async getFeedUser(feeds: Ref<FeedOfUserType[]>) {
-    feeds.value.pop()
+    feeds.value = [];
     try {
       const res = await fetch(import.meta.env.VITE_API_GET_FEED_USER_URL, {
         method: 'GET',
@@ -57,53 +79,69 @@ export class FeedAPI {
       });
       const result = await res.json();
       if (result.statusCode != 200) {
-        this.toast.add({ severity: 'error', summary: 'Error', detail: result.message, life: 3000 });
         return;
       }
       for (let i in result.data) {
-        feeds.value.unshift(result.data[i])
+        feeds.value.unshift(result.data[i]);
       }
     } catch (error) {
-      this.toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 });
       return;
     }
   }
 
-  public async updateFeedUser(updateData: FeedUpdateBodyType, feedId: number): Promise<boolean> {
+  public async updateFeedUser<T>(updateData: FeedUpdateBodyType, feedId: number): Promise<FetchResultType> {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_UPDATE_FEED_URL}/${feedId}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(updateData),
-        credentials: 'include'
+        credentials: 'include',
       });
 
-      const result = await res.json();
+      const result: FetchResponseType<T> = await res.json();
       if (result.statusCode !== 200) {
-        this.toast.add({ severity: 'error', summary: 'Error', detail: result.message, life: 3000 });
-        return false
+        return {
+          status: false,
+          message: result.data,
+        };
+      }
+      return {
+        status: true,
+        message: result.data,
       };
-      return true; 
     } catch (error) {
-      this.toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 });
-      return false;
+      return {
+        status: false,
+        message: error,
+      };
     }
   }
 
-  public async deleteFeedUser(feedId: number): Promise<boolean> {
+  public async deleteFeedUser<T>(feedId: number): Promise<FetchResultType> {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_DELETE_FEED_URL}/${feedId}`, {
         method: 'DELETE',
-        credentials: 'include'
+        credentials: 'include',
       });
 
-      const result = await res.json();
-      if (result.statusCode !== 200) return false;
-      return true;
+      const result: FetchResponseType<T> = await res.json();
+      if (result.statusCode !== 200) {
+        return {
+          status: false,
+          message: result.data,
+        };
+      }
+      return {
+        status: true,
+        message: result.data,
+      };
     } catch (error) {
-      return false;
+      return {
+        status: false,
+        message: error,
+      };
     }
   }
 }

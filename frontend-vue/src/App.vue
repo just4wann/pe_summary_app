@@ -3,20 +3,35 @@ import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-const isMobile = window.innerWidth > 500 ? true : false;
 
 onMounted(() => {
-  router.push('/');
+  router.push({
+    name: 'home',
+    params: {
+      id: 'main'
+    }
+  });
 });
 </script>
 
 <template>
   <main>
-    <h1 class="isMobile text-center mt-10" v-if="isMobile">
-      <p>This website cannot access on PC or Laptop. Please use your phone to access this website</p>
-    </h1>
-    <RouterView v-else></RouterView>
+    <RouterView v-slot="{ Component }">
+      <Transition name="fade" mode="out-in">
+        <component :is="Component"/>
+      </Transition>
+    </RouterView>
   </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
