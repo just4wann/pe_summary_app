@@ -5,13 +5,14 @@ import Post from '@/model/post.model.js';
 
 export default class PostService {
   static async create(value: PostDataRequest, user: User): Promise<ResponseBody<Post>> {
-    if (value.title == '' || value.description == '' || value.factory == '' || value.status == '') throw new ResponseError(400, 'Input field cannot empty');
+    if (value.title == '' || value.description == '' || value.factory.name == '' || value.status == '') throw new ResponseError(400, 'Input field cannot empty');
 
     const post = await Post.create({
       title: value.title,
       description: value.description,
-      factory: value.factory,
+      factory: value.factory.name,
       status: value.status,
+      imageUrl: value.imageUrl,
       UserId: user.id,
     });
 
@@ -38,7 +39,7 @@ export default class PostService {
   }
 
   static async getAll(): Promise<ResponseBody<Post[]>> {
-    const post = await Post.findAll({
+    let posts = await Post.findAll({
       include: [
         {
           attributes: ['fullname', 'nik', 'username'],
@@ -47,11 +48,12 @@ export default class PostService {
       ],
       order: ["createdAt"]
     });
-    if (post.length === 0) throw new ResponseError(404, 'Post not found');
+    if (posts.length === 0) throw new ResponseError(404, 'Post not found');
+
     return {
       statusCode: 200,
       message: 'All Post',
-      data: post,
+      data: posts,
     };
   }
 
@@ -62,13 +64,13 @@ export default class PostService {
       },
     });
 
-    if (!post) throw new ResponseError(404, 'not found');
+    if (!post) throw new ResponseError(404, 'Post not found');
 
     const affected = await Post.update(
       {
         title: updateData.title == '' ? post.title : updateData.title,
         description: updateData.description == '' ? post.description : updateData.description,
-        factory: updateData.factory == '' ? post.factory : updateData.factory,
+        factory: updateData.factory?.name == '' ? post.factory : updateData.factory?.name,
         status: updateData.status == '' ? post.status : updateData.status,
       },
       {
@@ -83,7 +85,7 @@ export default class PostService {
     return {
       statusCode: 200,
       message: 'OK',
-      data : 'Updated'
+      data : 'Post updated'
     }
   }
 
@@ -99,7 +101,7 @@ export default class PostService {
     return {
       statusCode: 200,
       message: 'OK',
-      data: `Post id : ${postIdQuery} deleted`,
+      data: `Post deleted`,
     };
   }
 }

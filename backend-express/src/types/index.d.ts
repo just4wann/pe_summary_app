@@ -23,13 +23,32 @@ export interface LoginUserRequest extends Request {
     password: string;
 }
 
-export interface PostDataRequest extends Request, Post {}
+export interface PostDataRequest extends Request {
+    title: string;
+    description: string;
+    factory: {
+        name: string;
+        code: string;
+    };
+    status: string;
+    imageUrl: string[]
+}
 
 export interface PostUpdateRequest extends Request {
     title?: string;
     description?: string;
-    factory?: string;
+    factory?: {
+        name?: string;
+        code?: string;
+    };
     status?: string;
+    imageUrl?: string[];
+}
+
+export interface UserProfileUpdateRequest extends Request {
+    fullname?: string;
+    username?: string;
+    nik?: string;
 }
 
 export interface JwtPayload {

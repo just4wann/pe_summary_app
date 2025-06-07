@@ -1,4 +1,4 @@
-import type { LoginUserRequest, RegisterUserRequest, ResponseBody } from '@/types/index.js';
+import type { LoginUserRequest, RegisterUserRequest, ResponseBody, UserProfileUpdateRequest } from '@/types/index.js';
 import ResponseError from '@/error/index.js';
 import User from '@/model/user.model.js';
 import bcrypt from 'bcrypt';
@@ -7,11 +7,18 @@ import { Op } from 'sequelize';
 
 export default class UserService {
   static async register(request: RegisterUserRequest): Promise<ResponseBody<User>> {
-    if (!request.username || !request.fullname || !request.password) throw new ResponseError(400, 'Input cannot empty');
+    if (!request.username || !request.fullname || !request.password || !request.nik) throw new ResponseError(400, 'Input cannot empty');
 
     const isRegistered = await User.findOne({
       where: {
-        username: request.username,
+        [Op.or]: [
+          {
+            username: request.username
+          },
+          {
+            nik: request.nik
+          }
+        ]
       },
     });
 
@@ -132,5 +139,27 @@ export default class UserService {
       message: 'Success get user',
       data: user,
     };
+  }
+
+  static async update(user: User, updateData: UserProfileUpdateRequest): Promise<ResponseBody<string>> {
+    const affected = await User.update(
+      {
+        fullname: updateData.fullname === '' ? user.fullname : updateData.fullname,
+        username: updateData.username === '' ? user.username : updateData.username,
+        nik: updateData.nik === '' ? user.nik : updateData.nik
+      },
+      {
+        where: {
+          id: user.id
+        }
+      }
+    )
+    if (affected[0] < 0) throw new ResponseError(400, 'Error during update user');
+
+    return {
+      statusCode: 200,
+      message: 'OK',
+      data: 'User Updated'
+    }
   }
 }

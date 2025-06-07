@@ -19,7 +19,7 @@ export default class PasswordService {
       },
     });
 
-    if (!user) throw new ResponseError(404, `User with username or nik : ${userInfo} not found`);
+    if (!user) throw new ResponseError(404, `User not found`);
 
     return {
       statusCode: 200,

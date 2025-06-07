@@ -4,6 +4,7 @@ import { ValidationError, Op } from 'sequelize';
 import User from '@/model/user.model.js';
 import jwt from 'jsonwebtoken';
 import { JwtPayload } from '@/types/index.js';
+import multer, { FileFilterCallback } from 'multer';
 
 export async function authMiddleware(req: Request, res: Response, next: NextFunction) {
   const authToken = req.cookies.token;
@@ -20,17 +21,17 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
     const user = await User.findOne({
       where: {
         [Op.or]: [
-            {
-                username: userAccess.user
-            },
-            {
-                nik: userAccess.user
-            }
-        ]
+          {
+            username: userAccess.user,
+          },
+          {
+            nik: userAccess.user,
+          },
+        ],
       },
     });
-    if (!user) throw new ResponseError(404, 'User not found')
-    req.user = user
+    if (!user) throw new ResponseError(404, 'User not found');
+    req.user = user;
     next();
   } catch (error) {
     res.status(401).json({
@@ -53,9 +54,34 @@ export function errorMiddleware(error: Error, req: Request, res: Response, next:
       message: error.message,
     });
   } else {
+    console.log(error)
     res.status(500).json({
       statusCode: 500,
       message: `Internal Server Error : ${error}`,
     });
   }
 }
+
+export const uploadMiddleware = multer({
+  storage: multer.diskStorage({
+    destination(req, file, callback) {
+      callback(null, 'src/uploads');
+    },
+    filename(req, file, callback) {
+      const unique = `${Date.now()}-${file.originalname}`;
+      callback(null, unique);
+    },
+  }),
+  fileFilter: (req: Request, file: Express.Multer.File, callback: FileFilterCallback) => {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (!allowedTypes.includes(file.mimetype)) {
+      callback(new Error('Only .jpg, .png, .pdf files are allowed'));
+      return;
+    }
+    callback(null, true);
+  },
+  limits: {
+    fileSize: 2 * 1024 * 1024,
+    files: 3
+  },
+});

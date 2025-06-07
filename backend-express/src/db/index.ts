@@ -72,6 +72,10 @@ export class SequelizeDB {
           type: DataTypes.STRING(10),
           allowNull: false,
         },
+        imageUrl: {
+          type: DataTypes.ARRAY(DataTypes.STRING),
+          allowNull: true
+        },
         createdAt: {
           type: DataTypes.DATE,
           allowNull: false,

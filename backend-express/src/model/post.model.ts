@@ -10,6 +10,7 @@ export default class Post extends Model<InferAttributes<Post>, InferCreationAttr
   declare description: string;
   declare factory: string;
   declare status: string;
+  declare imageUrl?: string[];
 
   declare user?: NonAttribute<User>;
 

@@ -1,6 +1,6 @@
 import type { Response, Request, NextFunction } from 'express';
 import UserService from '@/service/user.service.js';
-import { RegisterUserRequest, LoginUserRequest } from '@/types/index.js';
+import { RegisterUserRequest, LoginUserRequest, UserProfileUpdateRequest } from '@/types/index.js';
 import jwt from 'jsonwebtoken';
 
 export default class UserController {
@@ -52,6 +52,15 @@ export default class UserController {
   static async getUser(req: Request, res: Response, next: NextFunction) {
     try {
       const response = await UserService.get(req.user?.token!)
+      res.status(response.statusCode).json(response);
+    } catch (error) {
+      next(error)
+    }
+  }
+  static async userUpdate(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = req.body as UserProfileUpdateRequest
+      const response = await UserService.update(req.user!, data);
       res.status(response.statusCode).json(response);
     } catch (error) {
       next(error)
