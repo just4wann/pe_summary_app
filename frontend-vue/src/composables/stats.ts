@@ -1,22 +1,22 @@
 import { type Ref } from 'vue';
 import type { FeedType, TroubleDataRecordByDay, TroubleDataRecordByFactory, FactoryListType } from '../types';
-import { generateTimestamp } from '../utils';
+import { generateTimestamp, isSameDate } from '../utils';
 
 export default class StatisticChart {
   public async totalTroubleInDay(dataFeed: Ref<FeedType[]>, dataRecord: Ref<TroubleDataRecordByDay[]>, date: Ref<string[]>) {
     if (!dataFeed.value) return;
 
     dataRecord.value = [];
-    for (let i in date.value) {
-      let countData: number = 0;
-      let eachDate = new Date(date.value[i]);
-      for (let j in dataFeed.value) {
-        let feedDate = new Date(dataFeed.value[j].createdAt);
-        if (feedDate.getDate() == eachDate.getDate()) countData++;
+    for (const d of date.value) {
+      let counter: number = 0;
+      const eachDate = new Date(d);
+      for (let item of dataFeed.value) {
+        let feedDate = new Date(item.createdAt);
+        if (isSameDate(feedDate, eachDate)) counter++;
       }
       dataRecord.value.push({
-        value: countData,
-        timestamp: `${generateTimestamp(eachDate)[1]}`,
+        value: counter,
+        timestamp: generateTimestamp(eachDate)[1],
       });
     }
   }
@@ -36,7 +36,7 @@ export default class StatisticChart {
       };
       for (const item of dataFeed.value) {
         let feedDate = new Date(item.createdAt);
-        if (feedDate.getDate() == eachDate.getDate()) {
+        if (isSameDate(feedDate, eachDate)) {
           const factoryName = item.factory;
 
           if (!factory || factory === 'all') {
