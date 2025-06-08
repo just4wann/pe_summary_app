@@ -24,6 +24,14 @@ export default class StatisticChart {
   public async totalTroubleByFactory(dataFeed: Ref<FeedType[]>, dataRecord: Ref<TroubleDataRecordByFactory[]>, date: Ref<string[]>, factory?: FactoryListType) {
     if (!dataFeed.value) return;
 
+    const factoryMap = {
+      f1: 'Factory 1',
+      f2: 'Factory 2',
+      f3: 'Factory 3',
+      f4: 'Factory 4',
+      subpro: 'Subproduction',
+    };
+
     dataRecord.value = [];
     for (const d of date.value) {
       const eachDate = new Date(d);
@@ -32,7 +40,7 @@ export default class StatisticChart {
         f2: 0,
         f3: 0,
         f4: 0,
-        subpro: 0
+        subpro: 0,
       };
       for (const item of dataFeed.value) {
         let feedDate = new Date(item.createdAt);
@@ -46,14 +54,6 @@ export default class StatisticChart {
             else if (factoryName === 'Factory 4') counters.f4++;
             else if (factoryName === 'Subproduction') counters.subpro++;
           } else {
-            const factoryMap = {
-              f1: 'Factory 1',
-              f2: 'Factory 2',
-              f3: 'Factory 3',
-              f4: 'Factory 4',
-              subpro: 'Subproduction'
-            };
-
             if (factoryMap[factory] == factoryName) {
               if (factory === 'f1') counters.f1++;
               else if (factory === 'f2') counters.f2++;
