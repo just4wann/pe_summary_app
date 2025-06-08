@@ -6,7 +6,9 @@ import Footer from '../components/Footer.vue';
 import { generateTimestamp } from '../utils';
 import type { TroubleDataRecordByDay, TroubleDataRecordByFactory } from '../types';
 import StatisticChart from '../composables/stats';
+import { factoryData } from '../constant';
 
+const selectedFactory = ref<string>()
 const statistic = new StatisticChart();
 const datesByDay = ref<Date[] | undefined>([new Date(), new Date()]);
 const datesByFactory = ref<Date[] | undefined>([new Date(), new Date()]);
@@ -125,9 +127,29 @@ watchEffect(async () => {
           <section class="flex flex-col justify-center items-start gap-5">
             <div class="flex items-center justify-between w-full">
               <span class="poppins-semibold text-xs">Total Trouble by Factory</span>
-              <DatePicker v-model="datesByFactory" selectionMode="range" size="small" showIcon fluid :showOnFocus="false" placeholder="Select dates" :inputStyle="{ fontSize: '0.6rem', width: '9.5rem' }" />
+              <div class="flex flex-col gap-1">
+                <DatePicker v-model="datesByFactory" selectionMode="range" size="small" showIcon fluid :showOnFocus="false" placeholder="Select dates" :inputStyle="{ fontSize: '0.6rem', width: '9.5rem' }" />
+                <Select v-model="selectedFactory" :options="factoryData" optionLabel="name" placeholder="Select a Factory" class="w-full" size="small" :labelStyle="{fontSize: '0.6rem'}">
+                  <template #value="slotProps">
+                    <div v-if="slotProps.value" class="flex items-center">
+                      <div>{{ slotProps.value.name }}</div>
+                    </div>
+                    <span v-else>
+                      {{ slotProps.placeholder }}
+                    </span>
+                  </template>
+                  <template #option="slotProps">
+                    <div class="flex items-center">
+                      <div class="text-[0.6rem]">{{ slotProps.option.name }}</div>
+                    </div>
+                  </template>
+                  <template #dropdownicon>
+                    <i class="pi pi-warehouse" style="font-size: 0.8rem;"/>
+                  </template>
+                </Select>
+              </div>
             </div>
-            <VisXYContainer :data="troubleRecordByFactory" :margin="{ right: 15 }" :height="180" :key="datesByFactory">
+            <VisXYContainer :data="troubleRecordByFactory" :margin="{ right: 15 }" :height="200" :key="datesByFactory">
               <VisLine :x="xByFactory" :y="yByFactory" :lineWidth="2" />
               <VisAxis type="x" :x="xByFactory" :tickFormat="xTicksLabelByFactory" :tickTextAngle="10" :gridLine="false" label="Day" :labelMargin="5" :tickLine="false" :numTicks="xTickLabelLengthByFactory()" />
               <VisAxis type="y" :y="yByFactory" :gridLine="false" label="Total" :labelMargin="5" :tickLine="false" />
@@ -135,7 +157,7 @@ watchEffect(async () => {
               <VisScatter :x="xByFactory" :y="yByFactory" :size="5" />
               <VisTooltip />
             </VisXYContainer>
-            <VisBulletLegend :items="items" class="text-[0.5rem]"/>
+            <VisBulletLegend :items="items" class="text-[0.5rem]" />
           </section>
         </template>
       </Card>
