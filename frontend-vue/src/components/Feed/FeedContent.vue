@@ -18,7 +18,7 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL;
 const img = ref<number>(0);
 </script>
 <template>
-  <section class="text-[0.7rem] flex flex-col gap-2 -mt-3 -mb-2">
+  <section class="text-[0.7rem] flex flex-col gap-2 -mt-3 mb-2">
     <h1 class="font-bold">{{ title }}</h1>
     <p class="leading-none" v-for="(line, index) in formateDescription(description)" :key="index">
       {{ line }}

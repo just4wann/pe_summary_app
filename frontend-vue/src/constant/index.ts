@@ -6,22 +6,26 @@ type FactoryType = {
 export const factoryData: FactoryType[] = [
     {
       name: 'Factory 1',
-      code: 'F1',
+      code: 'f1',
     },
     {
       name: 'Factory 2',
-      code: 'F2',
+      code: 'f2',
     },
     {
       name: 'Factory 3',
-      code: 'F3',
+      code: 'f3',
     },
     {
       name: 'Factory 4',
-      code: 'F4',
+      code: 'f4',
     },
     {
       name: 'Subproduction',
-      code: 'Subpro',
+      code: 'subpro',
     },
+    {
+      name: 'All Factories',
+      code : 'all'
+    }
   ];

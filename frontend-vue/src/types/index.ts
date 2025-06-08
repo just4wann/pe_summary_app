@@ -106,3 +106,5 @@ export type TroubleDataRecordByFactory = {
   subpro: number;
   timestamp: string;
 }
+
+export type FactoryListType = 'f1' | 'f2' | 'f3' | 'f4' | 'subpro' | 'all';
