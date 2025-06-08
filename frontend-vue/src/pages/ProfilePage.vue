@@ -6,6 +6,7 @@ import type { FeedOfUserType, FeedUpdateBodyType, UserType, ProfileUpdateBodyTyp
 import { FeedAPI } from '../composables/feeds';
 import { UserAPI } from '../composables/users';
 import { generateTimestamp, formateDescription } from '../utils';
+import { factoryData } from '../constant'
 
 import Modal from '../components/Modal.vue';
 import Footer from '../components/Footer.vue';
@@ -72,7 +73,7 @@ const clearField = (dialog: DialogEnum) => {
   if (dialog == 'post') {
     feedUpdateRequestBody.title = '';
     feedUpdateRequestBody.description = '';
-    feedUpdateRequestBody.factory!.name = '';
+    feedUpdateRequestBody.factory = { name: '', code: '' };
     feedUpdateRequestBody.status = '';
 
     showEditPost.value = false;
@@ -220,12 +221,12 @@ const items = ref([
 const next = (callback: (ev: Event) => void, ev: Event) => {
   transitionName.value = 'slide-left';
   callback(ev);
-}
+};
 
 const prev = (callback: (ev: Event) => void, ev: Event) => {
   transitionName.value = 'slide-right';
   callback(ev);
-}
+};
 
 onBeforeMount(async () => {
   await feedAPI.getFeedUser(feeds);
@@ -393,36 +394,32 @@ onBeforeMount(async () => {
                           <div class="flex flex-col justify-center gap-2 w-full">
                             <input v-model="feedUpdateRequestBody.title" type="text" id="title" placeholder="Title" class="py-2 px-3 border border-slate-400 rounded-lg text-xs focus:outline-slate-400" />
                             <textarea v-model="feedUpdateRequestBody.description" id="desc" placeholder="Description" class="h-28 text-xs border border-slate-400 py-2 px-3 rounded-lg resize-none focus:outline-slate-400" />
-                            <div class="flex flex-wrap justify-center items-center gap-3 text-xs border border-slate-400 py-4 px-2 rounded-lg">
-                              <div class="flex items-center gap-2">
-                                <RadioButton v-model="feedUpdateRequestBody.factory!.name" inputId="f1" name="factory" value="Factory 1" size="small" />
-                                <label for="f1">Factory 1</label>
-                              </div>
-                              <div class="flex items-center gap-2">
-                                <RadioButton v-model="feedUpdateRequestBody.factory!.name" inputId="f2" name="factory" value="Factory 2" size="small" />
-                                <label for="f2">Factory 2</label>
-                              </div>
-                              <div class="flex items-center gap-2">
-                                <RadioButton v-model="feedUpdateRequestBody.factory!.name" inputId="f3" name="factory" value="Factory 3" size="small" />
-                                <label for="f3">Factory 3</label>
-                              </div>
-                              <div class="flex items-center gap-2">
-                                <RadioButton v-model="feedUpdateRequestBody.factory!.name" inputId="f4" name="factory" value="Factory 4" size="small" />
-                                <label for="f4">Factory 4</label>
-                              </div>
-                              <div class="flex items-center gap-2">
-                                <RadioButton v-model="feedUpdateRequestBody.factory!.name" inputId="subpro" name="factory" value="Subproduction" size="small" />
-                                <label for="subpro">Subproduction</label>
-                              </div>
-                            </div>
-                            <div class="flex items-center gap-2 text-xs border border-slate-400 rounded-lg px-3 py-2">
+                            <Select v-model="feedUpdateRequestBody.factory" :options="factoryData" optionLabel="name" placeholder="Select a Factory" class="mb-1 w-48" size="small" :labelStyle="{ fontSize: '0.65rem' }">
+                              <template #value="slotProps">
+                                <div v-if="slotProps.value.name != ''" class="flex items-center">
+                                  <div>{{ slotProps.value.name }}</div>
+                                </div>
+                                <span v-else>
+                                  {{ slotProps.placeholder }}
+                                </span>
+                              </template>
+                              <template #option="slotProps">
+                                <div class="flex items-center">
+                                  <div class="text-[0.7rem]">{{ slotProps.option.name }}</div>
+                                </div>
+                              </template>
+                              <template #dropdownicon>
+                                <i class="pi pi-warehouse" style="font-size: 0.8rem" />
+                              </template>
+                            </Select>
+                            <div class="flex flex-wrap gap-4 text-xs">
                               <div class="flex items-center gap-2">
                                 <RadioButton v-model="feedUpdateRequestBody.status" inputId="solved" name="status" value="Solved" size="small" />
-                                <label for="solved">Solved</label>
+                                <label for="solved" class="text-[0.6rem]">Solved</label>
                               </div>
                               <div class="flex items-center gap-2">
                                 <RadioButton v-model="feedUpdateRequestBody.status" inputId="pending" name="status" value="Pending" size="small" />
-                                <label for="pending">Pending</label>
+                                <label for="pending" class="text-[0.6rem]">Pending</label>
                               </div>
                             </div>
                           </div>
@@ -445,13 +442,13 @@ onBeforeMount(async () => {
                 <template #container="{ page, pageCount, prevPageCallback, nextPageCallback }">
                   <div class="flex items-center gap-4 justify-center">
                     <button @click="prev(prevPageCallback, $event)" :disabled="page === 0">
-                      <i class="pi pi-chevron-left" style="font-size: 0.7rem;"/>
+                      <i class="pi pi-chevron-left" style="font-size: 0.7rem" />
                     </button>
                     <div class="text-color text-[0.6rem]">
                       <span class="block sm:hidden">{{ page + 1 }} of {{ pageCount }}</span>
                     </div>
                     <button @click="next(nextPageCallback, $event)" :disabled="page === pageCount! - 1">
-                      <i class="pi pi-chevron-right" style="font-size: 0.7rem;"/>
+                      <i class="pi pi-chevron-right" style="font-size: 0.7rem" />
                     </button>
                   </div>
                 </template>

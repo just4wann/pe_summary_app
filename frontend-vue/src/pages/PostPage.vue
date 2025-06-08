@@ -2,8 +2,7 @@
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import type { FeedBodyType, ClearValueType, FetchResultType } from '../types';
-import { Function } from '../composables';
+import type { FeedBodyType, FetchResultType } from '../types';
 import { FeedAPI } from '../composables/feeds';
 import { factoryData } from '../constant';
 
@@ -28,22 +27,24 @@ const isFileUploaded = ref<boolean>(false);
 const showModal = ref<boolean>(true);
 const result = ref<FetchResultType>({
   status: false,
-  message: ''
-})
-
-const fieldData: ClearValueType = feedBodyRequest;
+  message: '',
+});
 
 const clear = () => {
-  Function.useClear(fieldData, ['title', 'description', 'factory', 'status']);
-  feedBodyRequest.title = fieldData.title;
-  feedBodyRequest.description = fieldData.description;
-  feedBodyRequest.factory = fieldData.factory;
-  feedBodyRequest.status = fieldData.status;
+  feedBodyRequest.title = '';
+  feedBodyRequest.description = '';
+  feedBodyRequest.factory = { name: '', code: '' };
+  feedBodyRequest.status = '';
   feedBodyRequest.imageUrl = [];
 };
 
 const back = () => {
-  router.back();
+  router.push({
+    name: 'home',
+    params: {
+      id: 'main'
+    }
+  });
   clear();
 };
 
@@ -67,7 +68,7 @@ const handlePostFeed = async () => {
   clear();
 };
 
-const handleCloseModal = () => showModal.value = true;
+const handleCloseModal = () => (showModal.value = true);
 </script>
 
 <template>
@@ -82,30 +83,45 @@ const handleCloseModal = () => showModal.value = true;
       <template #content>
         <section class="flex flex-col items-start justify-center">
           <FloatLabel variant="on" class="mb-3">
-            <label for="title" class="text-sm">Title</label>
-            <Textarea v-model="feedBodyRequest.title" autoResize rows="1" cols="40" class="text-sm font-light" />
+            <label for="title" class="text-[0.7rem]">Title</label>
+            <Textarea v-model="feedBodyRequest.title" autoResize rows="1" cols="30" style="font-size: 0.8rem;" />
           </FloatLabel>
           <FloatLabel variant="on" class="mb-3">
-            <label for="description" class="text-sm">Description</label>
-            <Textarea v-model="feedBodyRequest.description" autoResize rows="5" cols="40" />
+            <label for="description" class="text-[0.7rem]">Description</label>
+            <Textarea v-model="feedBodyRequest.description" autoResize rows="5" cols="30" style="font-size: 0.8rem;"/>
           </FloatLabel>
-          <div class="text-xs mb-5">
-            <Select v-model="feedBodyRequest.factory" :options="factoryData" optionLabel="name" placeholder="Select a Factory" size="small" checkmark :highlightOnSelect="false" class="w-full md:w-56 text-xs" />
-          </div>
+          <Select v-model="feedBodyRequest.factory" :options="factoryData" optionLabel="name" placeholder="Select a Factory" class="mb-3 w-48" size="small" :labelStyle="{ fontSize: '0.65rem' }">
+            <template #value="slotProps">
+              <div v-if="slotProps.value.name != ''" class="flex items-center">
+                <div>{{ slotProps.value.name }}</div>
+              </div>
+              <span v-else>
+                {{ slotProps.placeholder }}
+              </span>
+            </template>
+            <template #option="slotProps">
+              <div class="flex items-center">
+                <div class="text-[0.7rem]">{{ slotProps.option.name }}</div>
+              </div>
+            </template>
+            <template #dropdownicon>
+              <i class="pi pi-warehouse" style="font-size: 0.8rem" />
+            </template>
+          </Select>
           <div class="flex flex-wrap gap-4 text-xs mb-5">
             <div class="flex items-center gap-2">
               <RadioButton v-model="feedBodyRequest.status" inputId="solved" name="status" value="Solved" size="small" />
-              <label for="solved">Solved</label>
+              <label for="solved" class="text-[0.6rem]">Solved</label>
             </div>
             <div class="flex items-center gap-2">
               <RadioButton v-model="feedBodyRequest.status" inputId="pending" name="status" value="Pending" size="small" />
-              <label for="pending">Pending</label>
+              <label for="pending" class="text-[0.6rem]">Pending</label>
             </div>
           </div>
           <ImageUpload @files="handleReceiveFiles" @uploded="handleUploadResult" />
-          <button @click="handlePostFeed()" class="flex items-center gap-2 w-full bg-slate-700 py-3 px-4 rounded-lg hover:cursor-pointer justify-center">
+          <button @click="handlePostFeed()" class="flex items-center gap-2 w-full bg-slate-700 py-2.5 px-4 rounded-lg hover:cursor-pointer justify-center">
             <i class="pi pi-send text-slate-50" style="font-size: 0.7rem"></i>
-            <p class="text-sm text-slate-50">Post</p>
+            <p class="text-xs text-slate-50">Post</p>
           </button>
         </section>
       </template>

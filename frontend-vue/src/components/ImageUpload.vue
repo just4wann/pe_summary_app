@@ -83,7 +83,7 @@ const formatSize = (bytes: number) => {
               <i class="pi pi-times text-red-500" style="font-size: 0.8rem"></i>
             </button>
           </div>
-          <span class="whitespace-nowrap text-xs">{{ totalSize }}kB / 1Mb</span>
+          <span class="whitespace-nowrap text-[0.7rem]">{{ totalSize }}kB / 1Mb</span>
         </div>
       </template>
       <template #content="{ files, removeFileCallback }">
@@ -108,7 +108,7 @@ const formatSize = (bytes: number) => {
       <template #empty>
         <div class="flex items-center justify-center flex-col gap-2 -mt-5">
           <i class="pi pi-cloud-upload border border-slate-400 p-3 rounded-full" style="font-size: 1.5rem" />
-          <p class="text-xs">Upload your image here</p>
+          <p class="text-[0.7rem]">Upload your image here</p>
         </div>
       </template>
     </FileUpload>

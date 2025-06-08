@@ -41,13 +41,6 @@ export type FeedBodyType = {
   imageUrl?: string[]
 };
 
-export type ClearValueType = {
-  title: string;
-  description: string;
-  factory: FactorySelectedType;
-  status: string;
-};
-
 export type FactorySelectedType = {
   name: string;
   code: string;
