@@ -6,7 +6,7 @@ import type { FeedOfUserType, FeedUpdateBodyType, UserType, ProfileUpdateBodyTyp
 import { FeedAPI } from '../composables/feeds';
 import { UserAPI } from '../composables/users';
 import { generateTimestamp, formateDescription } from '../utils';
-import { factoryData } from '../constant'
+import { factoryData } from '../constant';
 
 import Modal from '../components/Modal.vue';
 import Footer from '../components/Footer.vue';
@@ -25,6 +25,7 @@ const feedUpdateRequestBody: FeedUpdateBodyType = reactive({
     name: '',
     code: 'F',
   },
+  category: '',
   status: '',
 });
 
@@ -64,6 +65,7 @@ const feeds = ref<FeedOfUserType[]>([
     description: '',
     factory: '',
     status: '',
+    category: '',
     createdAt: '',
     updatedAt: '',
   },
@@ -346,9 +348,10 @@ onBeforeMount(async () => {
                       <section class="flex justify-between items-start">
                         <p class="text-[0.6rem] text-slate-400 mt-1">{{ generateTimestamp(feeds[contentOf].createdAt)[0] }}</p>
                         <div class="relative flex items-start gap-2">
-                          <div class="text-[0.1rem] mr-2 flex gap-1">
+                          <div class="text-[0.1rem] flex gap-1">
+                            <span class="text-[0.5rem] text-center px-2 py-1 rounded-md" :class="feeds[contentOf].category == 'Trouble' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'">{{ feeds[contentOf].category }}</span>
                             <span class="text-[0.5rem] text-center bg-slate-100 px-2 py-1 rounded-md">{{ feeds[contentOf].factory }}</span>
-                            <span class="text-[0.5rem] text-center px-2 py-1 rounded-md" :class="feeds[contentOf].status == 'Solved' ? 'bg-green-100' : 'bg-orange-100'">
+                            <span class="text-[0.5rem] text-center px-2 py-1 rounded-md" :class="feeds[contentOf].status == 'Solved' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-600'">
                               {{ feeds[contentOf].status }}
                             </span>
                           </div>
@@ -383,7 +386,7 @@ onBeforeMount(async () => {
                         <p class="leading-none" v-for="(line, index) in formateDescription(feeds[contentOf].description)" :key="index">
                           {{ line }}
                         </p>
-                        <p v-if="feeds[contentOf].createdAt !== feeds[contentOf].updatedAt" class="text-[0.5rem] text-slate-400 self-end mt-2">Edited on {{ generateTimestamp(feeds[contentOf].updatedAt) }}</p>
+                        <p v-if="feeds[contentOf].createdAt !== feeds[contentOf].updatedAt" class="text-[0.5rem] text-slate-400 self-end mt-2">Edited on {{ generateTimestamp(feeds[contentOf].updatedAt)[0] }}</p>
                       </section>
                       <Dialog v-model:visible="showEditPost" modal :closable="false" :style="{ width: '20rem' }">
                         <template #header>
@@ -412,7 +415,17 @@ onBeforeMount(async () => {
                                 <i class="pi pi-warehouse" style="font-size: 0.8rem" />
                               </template>
                             </Select>
-                            <div class="flex flex-wrap gap-4 text-xs">
+                            <div class="flex flex-wrap gap-4 text-xs mb-1">
+                              <div class="flex items-center gap-2">
+                                <RadioButton v-model="feedUpdateRequestBody.category" inputId="trouble" name="category" value="Trouble" size="small" />
+                                <label for="trouble" class="text-[0.6rem]">Trouble</label>
+                              </div>
+                              <div class="flex items-center gap-2">
+                                <RadioButton v-model="feedUpdateRequestBody.category" inputId="improve" name="category" value="Improvement" size="small" />
+                                <label for="improve" class="text-[0.6rem]">Improvement</label>
+                              </div>
+                            </div>
+                            <div class="flex flex-wrap gap-5 text-xs">
                               <div class="flex items-center gap-2">
                                 <RadioButton v-model="feedUpdateRequestBody.status" inputId="solved" name="status" value="Solved" size="small" />
                                 <label for="solved" class="text-[0.6rem]">Solved</label>

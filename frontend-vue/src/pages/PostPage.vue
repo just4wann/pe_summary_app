@@ -20,6 +20,7 @@ const feedBodyRequest: FeedBodyType = reactive({
     name: '',
     code: '',
   },
+  category: '',
   imageUrl: [],
 });
 
@@ -36,6 +37,7 @@ const clear = () => {
   feedBodyRequest.factory = { name: '', code: '' };
   feedBodyRequest.status = '';
   feedBodyRequest.imageUrl = [];
+  feedBodyRequest.category = '';
 };
 
 const back = () => {
@@ -90,7 +92,7 @@ const handleCloseModal = () => (showModal.value = true);
             <label for="description" class="text-[0.7rem]">Description</label>
             <Textarea v-model="feedBodyRequest.description" autoResize rows="5" cols="30" style="font-size: 0.8rem;"/>
           </FloatLabel>
-          <Select v-model="feedBodyRequest.factory" :options="factoryData" optionLabel="name" placeholder="Select a Factory" class="mb-3 w-48" size="small" :labelStyle="{ fontSize: '0.65rem' }">
+          <Select v-model="feedBodyRequest.factory" :options="factoryData" optionLabel="name" placeholder="Select a Factory" class="mb-4 w-48" size="small" :labelStyle="{ fontSize: '0.65rem' }">
             <template #value="slotProps">
               <div v-if="slotProps.value.name != ''" class="flex items-center">
                 <div>{{ slotProps.value.name }}</div>
@@ -109,6 +111,16 @@ const handleCloseModal = () => (showModal.value = true);
             </template>
           </Select>
           <div class="flex flex-wrap gap-4 text-xs mb-5">
+            <div class="flex items-center gap-2">
+              <RadioButton v-model="feedBodyRequest.category" inputId="trouble" name="category" value="Trouble" size="small" />
+              <label for="trouble" class="text-[0.6rem]">Trouble</label>
+            </div>
+            <div class="flex items-center gap-2">
+              <RadioButton v-model="feedBodyRequest.category" inputId="improve" name="category" value="Improvement" size="small" />
+              <label for="improve" class="text-[0.6rem]">Improvement</label>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-5 text-xs mb-5">
             <div class="flex items-center gap-2">
               <RadioButton v-model="feedBodyRequest.status" inputId="solved" name="status" value="Solved" size="small" />
               <label for="solved" class="text-[0.6rem]">Solved</label>

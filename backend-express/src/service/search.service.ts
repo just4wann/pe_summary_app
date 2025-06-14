@@ -34,6 +34,11 @@ export default class SearchService {
               [Op.iLike]: `%${query.q}%`,
             },
           },
+          {
+            category: {
+              [Op.iLike] : `%${query.q}%`
+            }
+          }
         ],
       },
       include: {

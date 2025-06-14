@@ -5,7 +5,7 @@ import Post from '@/model/post.model.js';
 
 export default class PostService {
   static async create(value: PostDataRequest, user: User): Promise<ResponseBody<Post>> {
-    if (value.title == '' || value.description == '' || value.factory.name == '' || value.status == '') throw new ResponseError(400, 'Input field cannot empty');
+    if (value.title == '' || value.description == '' || value.factory.name == '' || value.status == ''  || value.category == '') throw new ResponseError(400, 'Input field cannot empty');
 
     const post = await Post.create({
       title: value.title,
@@ -13,6 +13,7 @@ export default class PostService {
       factory: value.factory.name,
       status: value.status,
       imageUrl: value.imageUrl,
+      category: value.category,
       UserId: user.id,
     });
 
@@ -72,6 +73,7 @@ export default class PostService {
         description: updateData.description == '' ? post.description : updateData.description,
         factory: updateData.factory?.name == '' ? post.factory : updateData.factory?.name,
         status: updateData.status == '' ? post.status : updateData.status,
+        category: updateData.category == '' ? post.category : updateData.category,
       },
       {
         where: {

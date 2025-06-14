@@ -76,6 +76,10 @@ export class SequelizeDB {
           type: DataTypes.ARRAY(DataTypes.STRING),
           allowNull: true
         },
+        category: {
+          type: DataTypes.STRING(12),
+          allowNull: false
+        },
         createdAt: {
           type: DataTypes.DATE,
           allowNull: false,

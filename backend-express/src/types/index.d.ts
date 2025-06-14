@@ -31,7 +31,8 @@ export interface PostDataRequest extends Request {
         code: string;
     };
     status: string;
-    imageUrl: string[]
+    imageUrl: string[];
+    category: string;
 }
 
 export interface PostUpdateRequest extends Request {
@@ -43,6 +44,7 @@ export interface PostUpdateRequest extends Request {
     };
     status?: string;
     imageUrl?: string[];
+    category?: string;
 }
 
 export interface UserProfileUpdateRequest extends Request {

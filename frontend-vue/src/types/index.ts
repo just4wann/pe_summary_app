@@ -5,6 +5,7 @@ export type FeedType = {
   factory: string;
   status: string;
   imageUrl?: string[];
+  category: string;
   createdAt: string;
   updatedAt: string;
   User: UserPostType;
@@ -17,6 +18,7 @@ export type FeedOfUserType = {
   factory: string;
   status: string;
   imageUrl?: string[];
+  category: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -38,7 +40,8 @@ export type FeedBodyType = {
   description: string;
   factory: FactorySelectedType
   status: string;
-  imageUrl?: string[]
+  imageUrl?: string[];
+  category: string;
 };
 
 export type FactorySelectedType = {
@@ -74,6 +77,7 @@ export type FeedUpdateBodyType = {
   description?: string;
   factory?: FactorySelectedType;
   status?: string;
+  category?: string;
 };
 
 export type ProfileUpdateBodyType = {

@@ -109,7 +109,7 @@ watchEffect(async () => {
               <span class="poppins-semibold text-xs">Total Trouble in a day</span>
               <DatePicker v-model="datesByDay" selectionMode="range" size="small" showIcon fluid :showOnFocus="false" placeholder="Select dates" :inputStyle="{ fontSize: '0.6rem', width: '9.5rem' }" />
             </div>
-            <VisXYContainer :data="troubleRecordByDay" :margin="{ right: 15 }" :height="200" :key="datesByDay">
+            <VisXYContainer :data="troubleRecordByDay" :margin="{ right: 15 }" :height="180" :key="datesByDay">
               <VisLine :x="xByDay" :y="yByDay" :lineWidth="2" />
               <VisAxis
                 type="x"
@@ -132,7 +132,7 @@ watchEffect(async () => {
           </section>
         </template>
       </Card>
-      <Card class="mt-2">
+      <Card class="mt-1">
         <template #content>
           <section class="flex flex-col justify-center items-start gap-5">
             <div class="flex items-center justify-between w-full">
