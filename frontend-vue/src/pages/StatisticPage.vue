@@ -21,9 +21,9 @@ const datesByFactory = ref<Date[] | undefined>([new Date(), new Date()]);
 const troubleRecordByDay = ref<TroubleDataRecordByDay[]>([]);
 const troubleRecordByFactory = ref<TroubleDataRecordByFactory[]>([]);
 
-const xByDay = (d: TroubleDataRecordByDay, i: number): number => i;
+const xByDay = (_d: TroubleDataRecordByDay, i: number): number => i;
 const yByDay = [(d: TroubleDataRecordByDay): number => d.value];
-const xByFactory = (d: TroubleDataRecordByFactory, i: number): number => i;
+const xByFactory = (_d: TroubleDataRecordByFactory, i: number): number => i;
 const yByFactory = [
   (d: TroubleDataRecordByFactory): number => d.f1,
   (d: TroubleDataRecordByFactory): number => d.f2,
@@ -73,7 +73,7 @@ const colorByFactory = ['blue', 'red', 'green', 'orange', 'pink'];
 const labelByFactory = ['Factory 1', 'Factory 2', 'Factory 3', 'Factory 4', 'Subproduction'];
 
 const itemsByFactory: BulletLegendItemInterface[] = labelByFactory.map((label, i) => ({ name: label, color: colorByFactory[i] }));
-const lineColorByFactory = (d: TroubleDataRecordByFactory, i: number) => colorByFactory[i];
+const lineColorByFactory = (_d: TroubleDataRecordByFactory, i: number) => colorByFactory[i];
 
 onBeforeMount(async () => {
   await feedAPI.getAllFeed(feedData);
