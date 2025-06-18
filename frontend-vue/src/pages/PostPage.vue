@@ -4,10 +4,15 @@ import { useRouter } from 'vue-router';
 
 import type { FeedBodyType, FetchResultType } from '../types';
 import { FeedAPI } from '../composables/feeds';
-import { factoryData } from '../constant';
 
 import ImageUpload from '../components/ImageUpload.vue';
 import Modal from '../components/Modal.vue';
+import Button from '../components/Button.vue';
+import FieldTitle from '../components/Post/FieldTitle.vue';
+import FieldDescription from '../components/Post/FieldDescription.vue';
+import SelectFactoryDropdown from '../components/Post/SelectFactoryDropdown.vue';
+import RadioCategories from '../components/Post/RadioCategories.vue';
+import RadioStatuses from '../components/Post/RadioStatuses.vue';
 
 const router = useRouter();
 const feedAPI = new FeedAPI();
@@ -84,57 +89,19 @@ const handleCloseModal = () => (showModal.value = true);
     <Card>
       <template #content>
         <section class="flex flex-col items-start justify-center">
-          <FloatLabel variant="on" class="mb-3">
-            <label for="title" class="text-[0.7rem]">Title</label>
-            <Textarea v-model="feedBodyRequest.title" autoResize rows="1" cols="30" style="font-size: 0.8rem;" />
-          </FloatLabel>
-          <FloatLabel variant="on" class="mb-3">
-            <label for="description" class="text-[0.7rem]">Description</label>
-            <Textarea v-model="feedBodyRequest.description" autoResize rows="5" cols="30" style="font-size: 0.8rem;"/>
-          </FloatLabel>
-          <Select v-model="feedBodyRequest.factory" :options="factoryData" optionLabel="name" placeholder="Select a Factory" class="mb-4 w-48" size="small" :labelStyle="{ fontSize: '0.65rem' }">
-            <template #value="slotProps">
-              <div v-if="slotProps.value.name != ''" class="flex items-center">
-                <div>{{ slotProps.value.name }}</div>
-              </div>
-              <span v-else>
-                {{ slotProps.placeholder }}
-              </span>
-            </template>
-            <template #option="slotProps">
-              <div class="flex items-center">
-                <div class="text-[0.7rem]">{{ slotProps.option.name }}</div>
-              </div>
-            </template>
-            <template #dropdownicon>
-              <i class="pi pi-warehouse" style="font-size: 0.8rem" />
-            </template>
-          </Select>
+          <FieldTitle v-model="feedBodyRequest.title"/>
+          <FieldDescription v-model="feedBodyRequest.description"/>
+          <SelectFactoryDropdown v-model="feedBodyRequest.factory"/>
           <div class="flex flex-wrap gap-4 text-xs mb-5">
-            <div class="flex items-center gap-2">
-              <RadioButton v-model="feedBodyRequest.category" inputId="trouble" name="category" value="Trouble" size="small" />
-              <label for="trouble" class="text-[0.6rem]">Trouble</label>
-            </div>
-            <div class="flex items-center gap-2">
-              <RadioButton v-model="feedBodyRequest.category" inputId="improve" name="category" value="Improvement" size="small" />
-              <label for="improve" class="text-[0.6rem]">Improvement</label>
-            </div>
+            <RadioCategories v-model="feedBodyRequest.category" label="Trouble"/>
+            <RadioCategories v-model="feedBodyRequest.category" label="Improvement"/>
           </div>
           <div class="flex flex-wrap gap-5 text-xs mb-5">
-            <div class="flex items-center gap-2">
-              <RadioButton v-model="feedBodyRequest.status" inputId="solved" name="status" value="Solved" size="small" />
-              <label for="solved" class="text-[0.6rem]">Solved</label>
-            </div>
-            <div class="flex items-center gap-2">
-              <RadioButton v-model="feedBodyRequest.status" inputId="pending" name="status" value="Pending" size="small" />
-              <label for="pending" class="text-[0.6rem]">Pending</label>
-            </div>
+            <RadioStatuses v-model="feedBodyRequest.status" label="Solved"/>
+            <RadioStatuses v-model="feedBodyRequest.status" label="Pending"/>
           </div>
           <ImageUpload @files="handleReceiveFiles" @uploded="handleUploadResult" />
-          <button @click="handlePostFeed()" class="flex items-center gap-2 w-full bg-slate-700 py-2.5 px-4 rounded-lg hover:cursor-pointer justify-center">
-            <i class="pi pi-send text-slate-50" style="font-size: 0.7rem"></i>
-            <p class="text-xs text-slate-50">Post</p>
-          </button>
+          <Button :action="handlePostFeed" label="Post" icon="pi pi-send" bgColor="bg-slate-700" textColor="text-slate-50"/>
         </section>
       </template>
     </Card>

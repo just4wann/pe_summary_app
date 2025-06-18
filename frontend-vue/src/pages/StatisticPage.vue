@@ -4,7 +4,7 @@ import { VisXYContainer, VisLine, VisAxis, VisCrosshair, VisTooltip, VisScatter,
 
 import Footer from '../components/Footer.vue';
 import { generateTimestamp } from '../utils';
-import { type FactoryListType, type FactoryType, type FeedType, type TroubleDataRecordByDay, type TroubleDataRecordByFactory } from '../types';
+import type { FactoryListType, FactoryType, FeedType, TroubleDataRecordByDay, TroubleDataRecordByFactory } from '../types';
 import StatisticChart from '../composables/stats';
 import { factoryData } from '../constant';
 import { FeedAPI } from '../composables/feeds';
